@@ -1,0 +1,1 @@
+export { default as GuildMercenariesBlock } from './ui/GuildMercenariesBlock.vue';

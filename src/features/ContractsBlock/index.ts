@@ -1,0 +1,1 @@
+export { default as ContractsBlock } from './ui/ContractsBlock.vue';

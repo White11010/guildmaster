@@ -1,0 +1,1 @@
+export { default as GuildContractsBlock } from './ui/GuildContractsBlock.vue';
