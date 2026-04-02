@@ -31,7 +31,14 @@ export const useGameStore = defineStore('game', {
             const contractsBoardStore = useContractsBoardStore();
             const hiringMarketStore = useHiringMarketStore();
 
-            guildStore.initGuild({ title: guildTitle, money: 100, fame: 0, reputation: 0 });
+            guildStore.initGuild({
+                title: guildTitle,
+                money: 100,
+                fame: 0,
+                reputation: 0,
+                mercenaries: [],
+                currentContracts: []
+            });
             contractsBoardStore.pushNewMultipleContracts(getRandomItems(contracts.map(buildBoardContract), 4));
             hiringMarketStore.pushNewMultipleMercenaries(getRandomItems(mercenaries, 5));
 

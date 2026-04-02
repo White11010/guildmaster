@@ -4,12 +4,19 @@ import { useHiringMarketStore } from "@/entities/HiringMarket";
 import type { Mercenary } from "@/entities/Mercenary";
 import { SpeciesTitles, ClassesTitles } from '@/entities/Mercenary';
 import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
+import { useGuildStore } from "@/entities/Guild";
 
 const hiringMarketStore = useHiringMarketStore();
+const guildStore = useGuildStore();
 
 const activeMercenary = ref<Mercenary>(hiringMarketStore.mercenaries[0]);
 function onMercenaryClick (mercenary: Mercenary): void {
   activeMercenary.value = mercenary;
+}
+
+function onHireButtonClick () {
+  guildStore.hireMercenary(activeMercenary.value);
+  activeMercenary.value = hiringMarketStore.mercenaries[0] ?? null;
 }
 </script>
 
@@ -22,7 +29,7 @@ function onMercenaryClick (mercenary: Mercenary): void {
           :key="mercenary.id"
           class="hiring-market__mercenary"
           :class="{
-            'hiring-market__mercenary--active': mercenary.id === activeMercenary.id
+            'hiring-market__mercenary--active': activeMercenary && mercenary.id === activeMercenary.id
           }"
           @click="onMercenaryClick(mercenary)"
         >
@@ -72,14 +79,23 @@ function onMercenaryClick (mercenary: Mercenary): void {
         </div>
       </div>
       <div class="hiring-market__mercenary-info">
-        <div class="hiring-market__mercenary-full-info">
-          <h3>{{ activeMercenary.name }}</h3>
-          <p>{{ activeMercenary.background }}</p>
-        </div>
-        <div class="hiring-market__mercenary-actions">
-          <button class="hiring-market__mercenary-hire-button">
-            Нанять
-          </button>
+        <template v-if="activeMercenary">
+          <div class="hiring-market__mercenary-full-info">
+            <h3>{{ activeMercenary.name }}</h3>
+            <p>{{ activeMercenary.background }}</p>
+          </div>
+          <div class="hiring-market__mercenary-actions">
+            <button
+              class="hiring-market__mercenary-hire-button"
+              :disabled="guildStore.money < activeMercenary.price"
+              @click="onHireButtonClick"
+            >
+              Нанять
+            </button>
+          </div>
+        </template>
+        <div v-else>
+          Выберите наемника в списке
         </div>
       </div>
     </div>

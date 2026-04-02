@@ -2,7 +2,7 @@
 import { HiringMarketBlockBlock } from '@/entities/HiringMarket';
 import { GuildBlock } from "@/entities/Guild";
 import { GuildContractsBlock } from "@/features/GuildContractsBlock";
-import { GuildMercenariesBlock } from "@/features/GuildMercenariesBlock";
+import { GuildMercenariesBlock } from "@/widgets/GuildMercenariesBlock";
 import { ContractsBlock } from "@/features/ContractsBlock";
 import { ItemsMarketBlock } from "@/features/ItemsMarketBlock";
 import { useGameStore } from "@/entities/Game";
