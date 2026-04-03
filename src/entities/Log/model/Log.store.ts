@@ -18,28 +18,28 @@ export const useLogStore = defineStore('log', {
         initLog (log: Array<LogEvent>) {
           this.log = log;
         },
-        pushNewMercenaryEvent (mercenary: Mercenary) {
-            this.log.push({
+        addNewMercenaryEvent (mercenary: Mercenary) {
+            this.log.unshift({
                 id: uuidv4(),
                 type: LogEventTypes.NEW_MERCENARY,
                 text: `На рынке доступен новый наемник: ${mercenary.name}`
             });
         },
-        pushNewMercenaryEventMultiple (mercenaries: Array<Mercenary>) {
+        addNewMercenaryEventMultiple (mercenaries: Array<Mercenary>) {
             mercenaries.forEach((mercenary: Mercenary) => {
-                this.pushNewMercenaryEvent(mercenary);
+                this.addNewMercenaryEvent(mercenary);
             });
         },
-        pushNewContractEvent (contract: BoardContract) {
-            this.log.push({
+        addNewContractEven (contract: BoardContract) {
+            this.log.unshift({
                 id: uuidv4(),
                 type: LogEventTypes.NEW_CONTRACT,
                 text: `На доске доступен новый контракт: ${contract.title}`
             });
         },
-        pushNewContractEventMultiple (contracts: Array<BoardContract>) {
+        addNewContractEvenMultiple (contracts: Array<BoardContract>) {
             contracts.forEach((contract: BoardContract) => {
-                this.pushNewContractEvent(contract);
+                this.addNewContractEven(contract);
             });
         }
     }

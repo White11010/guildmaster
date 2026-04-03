@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { useRoute } from "vue-router";
+
 const emit = defineEmits<{
   (e: 'click:menu'): void;
 }>();
+
+const route = useRoute();
 </script>
 
 <template>
@@ -11,6 +15,7 @@ const emit = defineEmits<{
         GuildMaster
       </h1>
       <button
+        v-if="route.path !== '/'"
         class="app__header-menu-button"
         @click="emit('click:menu')"
       >

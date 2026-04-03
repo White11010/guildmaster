@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { Mercenary } from "@/entities/Mercenary";
-import type { GuildContract } from "@/entities/Guild/model/Guild.types.ts";
+import type { GuildContract, GuildMercenary } from "@/entities/Guild/model/Guild.types.ts";
 import { useHiringMarketStore } from "@/entities/HiringMarket";
 import { useContractsBoardStore } from "@/entities/ContractsBoard";
 
@@ -9,7 +9,7 @@ interface State {
     money: number
     fame: number
     reputation: number
-    mercenaries: Array<Mercenary>
+    mercenaries: Array<GuildMercenary>
     currentContracts: Array<GuildContract>
 }
 
@@ -39,7 +39,11 @@ export const useGuildStore = defineStore('guild', {
         hireMercenary (mercenary: Mercenary) {
             const hiringMarketStore = useHiringMarketStore();
             if (this.money >= mercenary.price) {
-                this.mercenaries.push(mercenary);
+                this.mercenaries.push({
+                    ...mercenary,
+                    daysInGuild: 0,
+                    debt: 0
+                });
                 this.money -= mercenary.price;
                 hiringMarketStore.removeMercenaryById(mercenary.id);
             }
@@ -86,6 +90,20 @@ export const useGuildStore = defineStore('guild', {
         },
         removeFame (fame: number) {
             this.fame -= fame;
+        },
+        paySalary () {
+            this.mercenaries.forEach((mercenary: GuildMercenary) => {
+                mercenary.daysInGuild += 1;
+
+                if (mercenary.daysInGuild % 7 === 0) {
+                    if (this.money >= mercenary.salary) {
+                        this.money -= mercenary.salary;
+                    } else {
+                        mercenary.debt = mercenary.salary - this.money;
+                        this.money = 0;
+                    }
+                }
+            });
         }
     }
 });

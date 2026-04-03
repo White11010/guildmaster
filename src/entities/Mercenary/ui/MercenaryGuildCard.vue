@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import type { Mercenary } from "@/entities/Mercenary";
+import type { GuildMercenary } from "@/entities/Guild";
 
 const props = defineProps<{
-  mercenary: Mercenary;
+  mercenary: GuildMercenary;
 }>();
 </script>
 
 <template>
   <div class="mercenary-guild-card">
     <p>{{ props.mercenary.name }}</p>
+    <p>Дней в гильдии: {{ props.mercenary.daysInGuild }}</p>
   </div>
 </template>
 

@@ -27,5 +27,8 @@ const guildStore = useGuildStore();
 </template>
 
 <style scoped lang="scss">
-
+.guild-contracts-block {
+  height: 100%;
+  overflow: auto;
+}
 </style>

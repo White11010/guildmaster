@@ -13,6 +13,7 @@ export interface GuildContract extends BoardContract {
 
 export interface GuildMercenary extends Mercenary {
     daysInGuild: number;
+    debt: number
 }
 
 export interface Guild {

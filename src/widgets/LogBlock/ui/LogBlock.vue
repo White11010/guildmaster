@@ -23,8 +23,10 @@ const logStore = useLogStore();
 
 <style scoped lang="scss">
 .log-block {
+  height: 100%;
+  overflow: auto;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   gap: .5rem;
 }
 </style>

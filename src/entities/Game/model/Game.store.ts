@@ -99,10 +99,14 @@ export const useGameStore = defineStore('game', {
 
         },
         finishDay () {
+            const guildStore = useGuildStore();
+
             this.currentGame.day += 1;
 
             this.addNewMercenariesToMarket();
             this.addNewContractsToBoard();
+            guildStore.paySalary();
+
         },
         addNewMercenariesToMarket () {
             if (getChanceWithPity(0.33, this.currentGame.daysWithoutNewMercenaries)) {
@@ -115,7 +119,7 @@ export const useGameStore = defineStore('game', {
                     [...guildStore.guildMercenariesIds, ...hiringMarketStore.mercenariesIds]
                 );
                 hiringMarketStore.addNewMultipleMercenaries(newMercenaries);
-                logStore.pushNewMercenaryEventMultiple(newMercenaries);
+                logStore.addNewMercenaryEventMultiple(newMercenaries);
             }
         },
         addNewContractsToBoard () {
@@ -129,7 +133,7 @@ export const useGameStore = defineStore('game', {
                     [...guildStore.guildContractsIds, ...contractsBoardStore.contractsIds]
                 );
                 contractsBoardStore.addNewMultipleContracts(newContracts.map(buildBoardContract));
-                logStore.pushNewContractEventMultiple(newContracts.map(buildBoardContract));
+                logStore.addNewContractEvenMultiple(newContracts.map(buildBoardContract));
             }
         }
     }
