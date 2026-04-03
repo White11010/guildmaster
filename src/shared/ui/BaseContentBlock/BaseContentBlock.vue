@@ -1,7 +1,12 @@
 <script setup lang="ts">
-const props = defineProps<{
-  title: string
-}>();
+const props = withDefaults(defineProps<{
+  title: string,
+  emptyText?: string
+  empty?: boolean
+}>(), {
+  emptyText: '',
+  empty: false
+});
 </script>
 
 <template>
@@ -12,7 +17,13 @@ const props = defineProps<{
       </h1>
     </header>
     <div class="base-content-block__content">
-      <slot />
+      <div
+        v-if="props.empty && props.emptyText"
+        class="base-content-block__empty"
+      >
+        <p>{{ props.emptyText }}</p>
+      </div>
+      <slot v-else />
     </div>
   </div>
 </template>
@@ -36,6 +47,14 @@ const props = defineProps<{
   &__content {
     margin-top: 1rem;
     height: calc(100% - 3.5rem);
+  }
+
+  &__empty {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
   }
 }
 </style>

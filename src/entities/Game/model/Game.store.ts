@@ -2,15 +2,22 @@ import { defineStore } from "pinia";
 import { type ContractsBoard, useContractsBoardStore } from "@/entities/ContractsBoard";
 import { type HiringMarket, useHiringMarketStore } from "@/entities/HiringMarket";
 import { type Guild, useGuildStore } from "@/entities/Guild";
-import { contracts } from "@/mocks/contracts.ts";
-import { getRandomItems } from "@/shared/lib/random";
+import { getChanceWithPity, getRandomInt } from "@/shared/lib/random";
 import { buildBoardContract } from "@/entities/ContractsBoard/model/BoardContract.builder.ts";
-import { mercenaries } from "@/mocks/mercanaries.ts";
+import { mercenaryService } from "@/entities/Mercenary/api";
+import { useLogStore } from "@/entities/Log";
+import { contractService } from "@/entities/Contract/api/Contract.service.ts";
 
 interface State {
     savedGames: Record<string, SavedGame>;
     isGameLoaded: boolean;
+    currentGame: {
+        day: number;
+        daysWithoutNewMercenaries: number;
+        daysWithoutNewContracts: number;
+    };
 }
+
 interface SavedGame {
     guild: Guild;
     contractsBoard: ContractsBoard;
@@ -22,7 +29,12 @@ export const useGameStore = defineStore('game', {
     state: (): State => {
         return {
             savedGames: {},
-            isGameLoaded: false
+            isGameLoaded: false,
+            currentGame: {
+                day: 0,
+                daysWithoutNewMercenaries: 0,
+                daysWithoutNewContracts: 0
+            }
         };
     },
     actions: {
@@ -39,8 +51,8 @@ export const useGameStore = defineStore('game', {
                 mercenaries: [],
                 currentContracts: []
             });
-            contractsBoardStore.pushNewMultipleContracts(getRandomItems(contracts.map(buildBoardContract), 4));
-            hiringMarketStore.pushNewMultipleMercenaries(getRandomItems(mercenaries, 5));
+            contractsBoardStore.addNewMultipleContracts(contractService.getRandomContracts(4, []).map(buildBoardContract));
+            hiringMarketStore.addNewMultipleMercenaries(mercenaryService.getRandomMercenaries(5, []));
 
             this.isGameLoaded = true;
         },
@@ -85,6 +97,40 @@ export const useGameStore = defineStore('game', {
                 .sort((a, b) => a.updatedAt - b.updatedAt);
             this.initSavedGame(sortedSavedGamesByDate[0].guild.title);
 
+        },
+        finishDay () {
+            this.currentGame.day += 1;
+
+            this.addNewMercenariesToMarket();
+            this.addNewContractsToBoard();
+        },
+        addNewMercenariesToMarket () {
+            if (getChanceWithPity(0.33, this.currentGame.daysWithoutNewMercenaries)) {
+                const hiringMarketStore = useHiringMarketStore();
+                const logStore = useLogStore();
+                const guildStore = useGuildStore();
+
+                const newMercenaries = mercenaryService.getRandomMercenaries(
+                    getRandomInt(1, 2),
+                    [...guildStore.guildMercenariesIds, ...hiringMarketStore.mercenariesIds]
+                );
+                hiringMarketStore.addNewMultipleMercenaries(newMercenaries);
+                logStore.pushNewMercenaryEventMultiple(newMercenaries);
+            }
+        },
+        addNewContractsToBoard () {
+            if (getChanceWithPity(0.33, this.currentGame.daysWithoutNewContracts)) {
+                const contractsBoardStore = useContractsBoardStore();
+                const logStore = useLogStore();
+                const guildStore = useGuildStore();
+
+                const newContracts = contractService.getRandomContracts(
+                    getRandomInt(1, 2),
+                    [...guildStore.guildContractsIds, ...contractsBoardStore.contractsIds]
+                );
+                contractsBoardStore.addNewMultipleContracts(newContracts.map(buildBoardContract));
+                logStore.pushNewContractEventMultiple(newContracts.map(buildBoardContract));
+            }
         }
     }
 });

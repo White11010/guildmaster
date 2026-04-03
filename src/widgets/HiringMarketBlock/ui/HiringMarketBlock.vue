@@ -22,7 +22,10 @@ function onHireButtonClick () {
 
 <template>
   <base-content-block :title="'Рынок наемников'">
-    <div class="hiring-market__mercenaries">
+    <div
+      v-if="hiringMarketStore.mercenaries.length"
+      class="hiring-market__mercenaries"
+    >
       <div class="hiring-market__mercenaries-list">
         <div
           v-for="mercenary in hiringMarketStore.mercenaries"
@@ -99,6 +102,12 @@ function onHireButtonClick () {
         </div>
       </div>
     </div>
+    <div
+      v-else
+      class="hiring-market__empty"
+    >
+      <p>Сейчас нет доступных контрактов</p>
+    </div>
   </base-content-block>
 </template>
 
@@ -116,7 +125,7 @@ function onHireButtonClick () {
     overflow: auto;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   &__mercenary-info {
@@ -175,6 +184,14 @@ function onHireButtonClick () {
     &:last-child {
       justify-content: flex-end;
     }
+  }
+
+  &__empty {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
   }
 }
 </style>

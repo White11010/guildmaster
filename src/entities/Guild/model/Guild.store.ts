@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import type { Mercenary } from "@/entities/Mercenary";
 import type { GuildContract } from "@/entities/Guild/model/Guild.types.ts";
 import { useHiringMarketStore } from "@/entities/HiringMarket";
+import { useContractsBoardStore } from "@/entities/ContractsBoard";
 
 interface State {
     title: string
@@ -22,6 +23,10 @@ export const useGuildStore = defineStore('guild', {
             mercenaries: [],
             currentContracts: []
         };
+    },
+    getters: {
+        guildMercenariesIds: (state) => state.mercenaries.map(mercenary => mercenary.id),
+        guildContractsIds: (state) => state.currentContracts.map(contract => contract.id)
     },
     actions: {
         initGuild ({ title, fame, money, reputation, mercenaries }: State)  {
@@ -51,7 +56,11 @@ export const useGuildStore = defineStore('guild', {
                 .filter(mercenary => mercenaryToRemove.id !== mercenary.id);
         },
         addContract (contract: GuildContract) {
+            const contractsBoardStore = useContractsBoardStore();
+
             this.currentContracts.push(contract);
+            contractsBoardStore.removeContractById(contract.id);
+
         },
         updateContract (updatedContract: GuildContract) {
             const contractToUpdate = this.currentContracts

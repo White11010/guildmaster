@@ -11,15 +11,18 @@ export const useContractsBoardStore = defineStore('contractsBoard', {
             contracts: []
         };
     },
+    getters: {
+        contractsIds: (state) => state.contracts.map(contract => contract.id)
+    },
     actions: {
         initContracts (contracts: Array<BoardContract>) {
           this.contracts = contracts;
         },
-        pushNewContract (contract: BoardContract) {
-            this.contracts.push(contract);
+        addNewContract (contract: BoardContract) {
+            this.contracts.unshift(contract);
         },
-        pushNewMultipleContracts (contracts: Array<BoardContract>) {
-            this.contracts.push(...contracts);
+        addNewMultipleContracts (contracts: Array<BoardContract>) {
+            this.contracts.unshift(...contracts);
         },
         removeContractById (contractId: string) {
             const contractToRemove = this.contracts.findIndex((contract) => contract.id === contractId);

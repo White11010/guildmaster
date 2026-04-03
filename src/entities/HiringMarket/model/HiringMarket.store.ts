@@ -11,15 +11,18 @@ export const useHiringMarketStore = defineStore('hiringMarket', {
             mercenaries: []
         };
     },
+    getters: {
+      mercenariesIds: (state: State) => state.mercenaries.map(mercenary => mercenary.id)
+    },
     actions: {
         initMercenaries (mercenaries: Array<Mercenary>) {
             this.mercenaries = mercenaries;
         },
-        pushNewMercenary (mercenary: Mercenary) {
-            this.mercenaries.push(mercenary);
+        addNewMercenary (mercenary: Mercenary) {
+            this.mercenaries.unshift(mercenary);
         },
-        pushNewMultipleMercenaries (mercenaries: Array<Mercenary>) {
-          this.mercenaries.push(...mercenaries);
+        addNewMultipleMercenaries (mercenaries: Array<Mercenary>) {
+          this.mercenaries.unshift(...mercenaries);
         },
         removeMercenaryById (mercenaryId: string) {
             const mercenaryToRemove = this.mercenaries.findIndex((mercenary) => mercenary.id === mercenaryId);

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { HiringMarketBlockBlock } from '@/entities/HiringMarket';
+import { HiringMarketBlock } from '@/widgets/HiringMarketBlock';
 import { GuildBlock } from "@/entities/Guild";
-import { GuildContractsBlock } from "@/features/GuildContractsBlock";
+import { GuildContractsBlock } from "@/widgets/GuildContractsBlock";
 import { GuildMercenariesBlock } from "@/widgets/GuildMercenariesBlock";
-import { ContractsBlock } from "@/features/ContractsBlock";
-import { ItemsMarketBlock } from "@/features/ItemsMarketBlock";
+import { ContractsBlock } from "@/widgets/ContractsBlock";
 import { useGameStore } from "@/entities/Game";
 import { useRouter } from "vue-router";
+import { LogBlock } from "@/widgets/LogBlock";
 
 const gameStore = useGameStore();
 const router = useRouter();
@@ -23,6 +23,10 @@ function loadLastSavedGame () {
   }
 }
 loadLastSavedGame();
+
+function onFinishDayButtonClick () {
+  gameStore.finishDay();
+}
 </script>
 
 <template>
@@ -30,18 +34,21 @@ loadLastSavedGame();
     <template v-if="gameStore.isGameLoaded">
       <div class="game__content">
         <guild-block />
-        <hiring-market-block-block />
+        <hiring-market-block />
         <guild-contracts-block />
         <contracts-block />
         <guild-mercenaries-block />
-        <items-market-block />
+        <log-block />
       </div>
       <footer class="game__footer">
         <div class="game__footer-days-block">
           <p>Дней прошло:</p>
-          <p>1</p>
+          <p>{{ gameStore.currentGame.day }}</p>
         </div>
-        <button class="game__end-day-button">
+        <button
+          class="game__end-day-button"
+          @click="onFinishDayButtonClick"
+        >
           Завершить день
         </button>
       </footer>

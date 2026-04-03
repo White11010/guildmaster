@@ -2,25 +2,37 @@
 import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
 import { ref } from "vue";
 import { type BoardContract, useContractsBoardStore } from "@/entities/ContractsBoard";
+import { buildGuildContract, useGuildStore } from "@/entities/Guild";
 
 const contractsBoardStore = useContractsBoardStore();
+const guildStore = useGuildStore();
 
 const activeContract = ref(contractsBoardStore.contracts[0]);
 function onContractClick (contract: BoardContract) {
   activeContract.value = contract;
 }
+
+function onAcceptButtonCLick () {
+  if (activeContract.value) {
+    guildStore.addContract(buildGuildContract(activeContract.value));
+    activeContract.value = contractsBoardStore.contracts[0] ?? null;
+  }
+}
 </script>
 
 <template>
   <base-content-block title="Доска контрактов">
-    <div class="contracts-block">
+    <div
+      v-if="contractsBoardStore.contracts.length"
+      class="contracts-block"
+    >
       <div class="contracts-block__list">
         <div
           v-for="contract in contractsBoardStore.contracts"
           :key="contract.id"
           class="contracts-block__contract"
           :class="{
-            'contracts-block__contract--active': contract.id === activeContract.id,
+            'contracts-block__contract--active': activeContract && contract.id === activeContract.id,
           }"
           @click="onContractClick(contract)"
         >
@@ -50,20 +62,35 @@ function onContractClick (contract: BoardContract) {
         </div>
       </div>
       <div class="contracts-block__contract-info">
-        <div class="contracts-block__contract-full-info">
-          <h3 class="contracts-block__contract-info-title">
-            {{ activeContract.title }}
-          </h3>
-          <p class="contracts-block__contract-description">
-            {{ activeContract.description }}
-          </p>
-        </div>
-        <div class="contracts-block__contract-actions">
-          <button class="contracts-block__contract-accept-button">
-            Принять
-          </button>
+        <template v-if="activeContract">
+          <div class="contracts-block__contract-full-info">
+            <h3 class="contracts-block__contract-info-title">
+              {{ activeContract.title }}
+            </h3>
+            <p class="contracts-block__contract-description">
+              {{ activeContract.description }}
+            </p>
+          </div>
+          <div class="contracts-block__contract-actions">
+            <button
+              class="contracts-block__contract-accept-button"
+              :disabled="!activeContract"
+              @click="onAcceptButtonCLick"
+            >
+              Принять
+            </button>
+          </div>
+        </template>
+        <div v-else>
+          Выберите контракт в списке
         </div>
       </div>
+    </div>
+    <div
+      v-else
+      class="contracts-block__empty"
+    >
+      <p>Сейчас нет доступных контрактов</p>
     </div>
   </base-content-block>
 </template>
@@ -80,7 +107,7 @@ function onContractClick (contract: BoardContract) {
     overflow: auto;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   &__contract {
@@ -124,6 +151,14 @@ function onContractClick (contract: BoardContract) {
   }
   &__contract-accept-button {
     font-size: 1.5rem;
+  }
+
+  &__empty {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
   }
 
 }
