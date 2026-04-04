@@ -1,0 +1,1 @@
+export { default as ChangeSettings } from './ui/ChangeSettings.vue';
