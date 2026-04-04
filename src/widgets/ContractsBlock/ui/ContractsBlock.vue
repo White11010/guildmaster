@@ -3,6 +3,7 @@ import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
 import { ref } from "vue";
 import { type BoardContract, useContractsBoardStore } from "@/entities/ContractsBoard";
 import { buildGuildContract, useGuildStore } from "@/entities/Guild";
+import { BaseLabelValueBlock } from "@/shared/ui/BaseLabelValueBlock";
 
 const contractsBoardStore = useContractsBoardStore();
 const guildStore = useGuildStore();
@@ -39,25 +40,25 @@ function onAcceptButtonCLick () {
           <p class="contracts-block__contract-title">
             {{ contract.title }}
           </p>
-          <div class="contracts-block__contract-short-info-block">
-            <p>Заказчик:</p>
-            <p>{{ contract.customer }}</p>
+          <base-label-value-block
+            :value="contract.customer"
+            label="Заказчик"
+          />
+          <div class="contracts-block__contract-short-info">
+            <base-label-value-block
+              :value="contract.difficulty"
+              label="Сложность"
+            />
           </div>
           <div class="contracts-block__contract-short-info">
-            <div class="contracts-block__contract-short-info-block">
-              <p>Сложность:</p>
-              <p>{{ contract.difficulty }}</p>
-            </div>
-          </div>
-          <div class="contracts-block__contract-short-info">
-            <div class="contracts-block__contract-short-info-block">
-              <p>Награда:</p>
-              <p>{{ contract.reward.money }}</p>
-            </div>
-            <div class="contracts-block__contract-short-info-block">
-              <p>Предоплата:</p>
-              <p>{{ contract.prepayment }}</p>
-            </div>
+            <base-label-value-block
+              :value="contract.reward.money"
+              label="Награда"
+            />
+            <base-label-value-block
+              :value="contract.prepayment"
+              label="Предоплата"
+            />
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
-import { MercenaryGuildCard } from "@/entities/Mercenary";
-import { useGuildStore } from "@/entities/Guild";
+import { useGuildStore, GuildMercenaryCard } from "@/entities/Guild";
 
 const guildStore = useGuildStore();
 </script>
@@ -12,7 +11,7 @@ const guildStore = useGuildStore();
       v-if="guildStore.mercenaries && guildStore.mercenaries.length"
       class="guild-mercenaries-block"
     >
-      <mercenary-guild-card
+      <guild-mercenary-card
         v-for="mercenary in guildStore.mercenaries"
         :key="mercenary.id"
         :mercenary="mercenary"
@@ -28,5 +27,11 @@ const guildStore = useGuildStore();
 </template>
 
 <style scoped lang="scss">
-
+.guild-mercenaries-block {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
 </style>

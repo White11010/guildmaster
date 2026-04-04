@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StartMenu } from "@/features/StartMenu";
+import { StartMenu } from "@/widgets/StartMenu";
 </script>
 
 <template>

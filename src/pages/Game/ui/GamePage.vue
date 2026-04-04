@@ -70,7 +70,8 @@ function onFinishDayButtonClick () {
     grid-template-rows: 1fr 1fr 1fr;
     margin: 0 auto;
     padding: 2rem;
-    border: 1px solid black;
+    border: 4px solid black;
+    background-color: rgb(black, .1);
   }
   &__footer {
     margin: 1rem auto 0 auto;

@@ -106,6 +106,7 @@ export const useGameStore = defineStore('game', {
             this.addNewMercenariesToMarket();
             this.addNewContractsToBoard();
             guildStore.paySalary();
+            guildStore.increaseContractsDays();
 
         },
         addNewMercenariesToMarket () {

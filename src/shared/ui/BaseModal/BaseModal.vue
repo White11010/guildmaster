@@ -6,7 +6,9 @@ interface BaseModalPropsExtended extends BaseModalProps {
   withCloseButton?: boolean;
 }
 const props = withDefaults(defineProps<BaseModalPropsExtended>(), {
-  withCloseButton: false
+  withCloseButton: false,
+  width: 'auto',
+  height: 'auto'
 });
 
 const emit = defineEmits<BaseModalEmits>();
@@ -21,7 +23,13 @@ function close () {
     v-if="props.modelValue"
     class="base-modal"
   >
-    <div class="base-modal__window">
+    <div
+      class="base-modal__window"
+      :style="{
+        width: props.width,
+        height: props.height,
+      }"
+    >
       <header class="base-modal__header">
         <h3 class="base-modal__heading">
           {{ props.title }}
@@ -79,6 +87,7 @@ function close () {
   }
 
   &__body {
+    flex: 1;
     padding: 1rem;
   }
 }

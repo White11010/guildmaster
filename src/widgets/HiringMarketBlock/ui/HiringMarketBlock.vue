@@ -5,6 +5,7 @@ import type { Mercenary } from "@/entities/Mercenary";
 import { SpeciesTitles, ClassesTitles } from '@/entities/Mercenary';
 import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
 import { useGuildStore } from "@/entities/Guild";
+import { BaseLabelValueBlock } from "@/shared/ui/BaseLabelValueBlock";
 
 const hiringMarketStore = useHiringMarketStore();
 const guildStore = useGuildStore();
@@ -52,32 +53,20 @@ function onHireButtonClick () {
                 {{ SpeciesTitles[mercenary.species] }}
               </p>
             </div>
-            <div class="hiring-market__mercenary-short-info-block">
-              <p class="hiring-market__mercenary-short-info-block-title">
-                Уровень:
-              </p>
-              <p class="hiring-market__mercenary-short-info-block-value">
-                {{ mercenary.level }}
-              </p>
-            </div>
+            <base-label-value-block
+              :value="mercenary.level"
+              label="Уровень"
+            />
           </div>
           <div class="hiring-market__mercenary-short-info">
-            <div class="hiring-market__mercenary-short-info-block">
-              <p class="hiring-market__mercenary-short-info-block-title">
-                Стоимость:
-              </p>
-              <p class="hiring-market__mercenary-short-info-block-value">
-                {{ mercenary.price }}
-              </p>
-            </div>
-            <div class="hiring-market__mercenary-short-info-block">
-              <p class="hiring-market__mercenary-short-info-block-title">
-                Плата в неделю:
-              </p>
-              <p class="hiring-market__mercenary-short-info-block-value">
-                {{ mercenary.salary }}
-              </p>
-            </div>
+            <base-label-value-block
+              :value="mercenary.price"
+              label="Стоимость"
+            />
+            <base-label-value-block
+              :value="mercenary.salary"
+              label="Плата в неделю"
+            />
           </div>
         </div>
       </div>

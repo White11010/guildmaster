@@ -2,17 +2,13 @@
 import { RouterView } from './providers';
 import './style.css';
 import { AppLayout } from "@/shared/ui/AppLayout";
-import { useGameStore } from "@/entities/Game";
-import { SettingsModal } from "@/features/SettingsModal";
-import { ref } from "vue";
+import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
+import { AppModal } from "@/shared/ui/AppModal";
 
-const gameStore = useGameStore();
+const appModalStore = useAppModalStore();
 
-const isSettingsModalOpen = ref(false);
 function onMenuButtonClick () {
-  gameStore.saveGame();
-  isSettingsModalOpen.value = true;
-
+  appModalStore.setCurrentModal(AppModals.GAME_MENU);
 }
 </script>
 
@@ -21,5 +17,5 @@ function onMenuButtonClick () {
     <router-view />
   </app-layout>
 
-  <settings-modal v-model="isSettingsModalOpen" />
+  <app-modal />
 </template>

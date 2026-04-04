@@ -1,0 +1,6 @@
+export enum AppModals {
+    CHANGE_SETTINGS,
+    GAME_MENU,
+    LOAD_GAME,
+    ENTER_NEW_GUILD_TITLE
+}

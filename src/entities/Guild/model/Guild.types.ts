@@ -3,12 +3,18 @@ import type { BoardContract } from "@/entities/ContractsBoard";
 
 export enum GuildContractStates {
     PENDING,
-    IN_PROGRESS
+    IN_PROGRESS,
+    OVERDUE,
+    COMPLETED,
+    FAILED,
 }
 
 export interface GuildContract extends BoardContract {
     state: GuildContractStates;
     mercenaries: Array<Mercenary>;
+    power: number;
+    daysAfterTaken: number;
+    daysInProgress: number;
 }
 
 export interface GuildMercenary extends Mercenary {

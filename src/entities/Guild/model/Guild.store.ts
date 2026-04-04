@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { Mercenary } from "@/entities/Mercenary";
-import type { GuildContract, GuildMercenary } from "@/entities/Guild/model/Guild.types.ts";
+import { type GuildContract, GuildContractStates, type GuildMercenary } from "@/entities/Guild/model/Guild.types.ts";
 import { useHiringMarketStore } from "@/entities/HiringMarket";
 import { useContractsBoardStore } from "@/entities/ContractsBoard";
 
@@ -26,10 +26,19 @@ export const useGuildStore = defineStore('guild', {
     },
     getters: {
         guildMercenariesIds: (state) => state.mercenaries.map(mercenary => mercenary.id),
-        guildContractsIds: (state) => state.currentContracts.map(contract => contract.id)
+        guildContractsIds: (state) => state.currentContracts.map(contract => contract.id),
+        freeMercenaries: state => {
+            const contractsInProgress = state.currentContracts
+                .filter(contract => contract.state === GuildContractStates.IN_PROGRESS);
+            const busyMercenariesIds = contractsInProgress
+                .reduce<Array<string>>((mercenaries, contract) => {
+                    return [...mercenaries, ...contract.mercenaries.map(mercenary => mercenary.id)];
+                }, []);
+            return state.mercenaries.filter(mercenary => !busyMercenariesIds.includes(mercenary.id));
+        }
     },
     actions: {
-        initGuild ({ title, fame, money, reputation, mercenaries }: State)  {
+        initGuild ({ title, fame, money, reputation, mercenaries }: State) {
             this.title = title;
             this.money = money;
             this.reputation = reputation;
@@ -49,11 +58,11 @@ export const useGuildStore = defineStore('guild', {
             }
         },
         updateMercenary (updatedMercenary: Mercenary) {
-          const mercenaryToUpdate = this.mercenaries
-              .find(mercenary => mercenary.id === updatedMercenary.id);
-          if (mercenaryToUpdate) {
-              Object.assign(mercenaryToUpdate, updatedMercenary);
-          }
+            const mercenaryToUpdate = this.mercenaries
+                .find(mercenary => mercenary.id === updatedMercenary.id);
+            if (mercenaryToUpdate) {
+                Object.assign(mercenaryToUpdate, updatedMercenary);
+            }
         },
         removeMercenary (mercenaryToRemove: Mercenary) {
             this.mercenaries = this.mercenaries
@@ -63,8 +72,18 @@ export const useGuildStore = defineStore('guild', {
             const contractsBoardStore = useContractsBoardStore();
 
             this.currentContracts.push(contract);
+
             contractsBoardStore.removeContractById(contract.id);
 
+            this.addMoney(contract.prepayment);
+        },
+        startContract (contract: GuildContract, mercenaries: Array<GuildMercenary>) {
+            const contractToStart = this.currentContracts
+                .find(currentContract => currentContract.id === contract.id);
+            if (contractToStart) {
+                contractToStart.mercenaries = mercenaries;
+                contractToStart.state = GuildContractStates.IN_PROGRESS;
+            }
         },
         updateContract (updatedContract: GuildContract) {
             const contractToUpdate = this.currentContracts
@@ -104,6 +123,26 @@ export const useGuildStore = defineStore('guild', {
                     }
                 }
             });
+        },
+        increaseContractsDays () {
+            this.currentContracts.forEach((contract: GuildContract) => {
+                contract.daysAfterTaken += 1;
+
+                if (contract.state === GuildContractStates.IN_PROGRESS) {
+                    contract.daysInProgress += 1;
+                    if (contract.daysInProgress >= contract.duration[0]) {
+                        contract.state = GuildContractStates.COMPLETED;
+                        this.addMoney(contract.reward.money);
+                    }
+                }
+
+                if (contract.state === GuildContractStates.PENDING) {
+                    if (contract.daysAfterTaken >= contract.daysToStart) {
+                        contract.state = GuildContractStates.OVERDUE;
+                    }
+                }
+            });
+
         }
     }
 });

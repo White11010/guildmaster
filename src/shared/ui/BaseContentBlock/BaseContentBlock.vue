@@ -35,6 +35,7 @@ const props = withDefaults(defineProps<{
   overflow: hidden;
   border: 4px solid black;
   padding: 1rem;
+  background-color: white;
 
   &__header {
 
