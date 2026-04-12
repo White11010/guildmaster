@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
-import { ref } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 import { useGameStore } from "@/entities/Game";
 import { useRouter } from "vue-router";
-import { useAppModalStore } from "@/shared/model/AppModal";
+import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
@@ -14,17 +14,27 @@ const appModalStore = useAppModalStore();
 
 const newGuildTitle = ref(null);
 
-function onStartButtonClick () {
-  gameStore.startNewGame({ guildTitle: newGuildTitle.value });
-  router.push('/game');
-  appModalStore.closeModal();
+async function onStartButtonClick () {
+  if (newGuildTitle.value) {
+    gameStore.startNewGame({ guildTitle: newGuildTitle.value });
+    await router.push('/game');
+    appModalStore.setCurrentModal(AppModals.ONBOARDING);
+  }
 }
+
+const titleInput = useTemplateRef('titleInput');
+onMounted(() => {
+  if (titleInput.value) {
+    titleInput.value.focus();
+  }
+});
 </script>
 
 <template>
   <base-modal
     title="Новая игра"
     :model-value="props.modelValue"
+    with-close-button
     @update:model-value="emit('update:modelValue', $event)"
   >
     <div class="enter-new-guild-title">
@@ -32,6 +42,7 @@ function onStartButtonClick () {
         Введите название гильдии
       </p>
       <input
+        ref="titleInput"
         v-model="newGuildTitle"
         class="enter-new-guild-title__input"
         type="text"

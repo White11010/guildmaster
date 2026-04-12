@@ -7,21 +7,21 @@ const emit = defineEmits<BaseModalEmits>();
 
 const settings: Array<SettingsItem> = [
   {
-    title: 'Автосохранения',
+    title: 'Тут будут настройки',
     type: SettingsItemTypes.CHECKBOX,
     handler () {
 
     }
   },
   {
-    title: 'Автосохранения',
+    title: 'Тут будут настройки',
     type: SettingsItemTypes.CHECKBOX,
     handler () {
 
     }
   },
   {
-    title: 'Автосохранения',
+    title: 'Тут будут настройки',
     type: SettingsItemTypes.CHECKBOX,
     handler () {
 

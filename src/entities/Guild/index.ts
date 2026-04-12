@@ -7,3 +7,4 @@ export { default as GuildContractCard } from './ui/GuildContractCard.vue';
 export { default as GuildMercenaryAssignmentCard } from './ui/GuildMercenaryAssignmentCard.vue';
 export { GuildContractStatesTitles } from './model/Guild.titles.ts';
 export { default as GuildMercenaryCard } from './ui/GuildMercenaryCard.vue';
+export { buildGuildMercenary, normalizeGuildMercenary } from './model/GuildMercenary.builder.ts';

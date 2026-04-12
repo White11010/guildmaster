@@ -16,7 +16,6 @@ export const useAppModalStore = defineStore('appModal', {
     },
     actions: {
         setCurrentModal (modal: AppModals) {
-            console.log(modal);
             this.currentModal = modal;
         },
         closeModal () {

@@ -1,15 +1,26 @@
 <script setup lang="ts">
 import { HiringMarketBlock } from '@/widgets/HiringMarketBlock';
-import { GuildBlock } from "@/entities/Guild";
+import { GuildBlock, useGuildStore } from "@/entities/Guild";
 import { GuildContractsBlock } from "@/widgets/GuildContractsBlock";
 import { GuildMercenariesBlock } from "@/widgets/GuildMercenariesBlock";
 import { ContractsBlock } from "@/widgets/ContractsBlock";
 import { useGameStore } from "@/entities/Game";
+import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
 import { useRouter } from "vue-router";
 import { LogBlock } from "@/widgets/LogBlock";
 
 const gameStore = useGameStore();
+const guildStore = useGuildStore();
+const appModalStore = useAppModalStore();
 const router = useRouter();
+
+function shouldOfferDebtSettlement(): boolean {
+  const withDebt = guildStore.mercenaries.filter((m) => m.debt > 0);
+  if (!withDebt.length || guildStore.money <= 0) {
+    return false;
+  }
+  return withDebt.some((m) => m.debt <= guildStore.money);
+}
 
 function loadLastSavedGame () {
   if (!gameStore.isGameLoaded) {
@@ -26,6 +37,9 @@ loadLastSavedGame();
 
 function onFinishDayButtonClick () {
   gameStore.finishDay();
+  if (shouldOfferDebtSettlement()) {
+    appModalStore.setCurrentModal(AppModals.PAY_DEBTS);
+  }
 }
 </script>
 

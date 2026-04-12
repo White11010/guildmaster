@@ -2,6 +2,7 @@
 import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
 import { ref } from "vue";
 import { type BoardContract, useContractsBoardStore } from "@/entities/ContractsBoard";
+import { getContractEstimatedDurationDays } from "@/entities/Contract";
 import { buildGuildContract, useGuildStore } from "@/entities/Guild";
 import { BaseLabelValueBlock } from "@/shared/ui/BaseLabelValueBlock";
 
@@ -49,8 +50,16 @@ function onAcceptButtonCLick () {
               :value="contract.difficulty"
               label="Сложность"
             />
+            <base-label-value-block
+              :value="contract.daysToStart"
+              label="Дней на начало после принятия"
+            />
           </div>
           <div class="contracts-block__contract-short-info">
+            <base-label-value-block
+              :value="getContractEstimatedDurationDays(contract.duration)"
+              label="Длительность, дн."
+            />
             <base-label-value-block
               :value="contract.reward.money"
               label="Награда"
@@ -71,6 +80,10 @@ function onAcceptButtonCLick () {
             <p class="contracts-block__contract-description">
               {{ activeContract.description }}
             </p>
+            <base-label-value-block
+              :value="activeContract.daysToStart"
+              label="Дней на начало выполнения после принятия"
+            />
           </div>
           <div class="contracts-block__contract-actions">
             <button
@@ -129,7 +142,7 @@ function onAcceptButtonCLick () {
   &__contract-short-info {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 0.5rem 1rem;
   }
   &__contract-short-info-block {
     display: flex;
@@ -142,6 +155,9 @@ function onAcceptButtonCLick () {
     padding: 0 1rem;
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    max-height: 100%;
+    gap: 1rem;
   }
   &__contract-full-info {
     flex: 1;

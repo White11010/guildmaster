@@ -5,8 +5,9 @@ import { type Guild, useGuildStore } from "@/entities/Guild";
 import { getChanceWithPity, getRandomInt } from "@/shared/lib/random";
 import { buildBoardContract } from "@/entities/ContractsBoard/model/BoardContract.builder.ts";
 import { mercenaryService } from "@/entities/Mercenary/api";
-import { useLogStore } from "@/entities/Log";
+import { type LogEvent, useLogStore } from "@/entities/Log";
 import { contractService } from "@/entities/Contract/api/Contract.service.ts";
+import { v4 as uuidv4 } from "uuid";
 
 interface State {
     savedGames: Record<string, SavedGame>;
@@ -16,6 +17,7 @@ interface State {
         daysWithoutNewMercenaries: number;
         daysWithoutNewContracts: number;
     };
+    gameId: string | null;
 }
 
 interface SavedGame {
@@ -23,6 +25,12 @@ interface SavedGame {
     contractsBoard: ContractsBoard;
     hiringMarket: HiringMarket;
     updatedAt: number;
+    game: {
+        day: number,
+        daysWithoutNewMercenaries: number,
+        daysWithoutNewContracts: number
+    };
+    log?: Array<LogEvent>;
 }
 
 export const useGameStore = defineStore('game', {
@@ -30,6 +38,7 @@ export const useGameStore = defineStore('game', {
         return {
             savedGames: {},
             isGameLoaded: false,
+            gameId: null,
             currentGame: {
                 day: 0,
                 daysWithoutNewMercenaries: 0,
@@ -37,12 +46,29 @@ export const useGameStore = defineStore('game', {
             }
         };
     },
+    getters: {
+      savedGamesIds: (state: State): Array<string> => Object.keys(state.savedGames)
+    },
     actions: {
+        setGameId (gameId: string | null) {
+            this.gameId = gameId;
+        },
+        resetGame () {
+
+        },
         startNewGame ({ guildTitle }: { guildTitle: string }) {
             const guildStore = useGuildStore();
             const contractsBoardStore = useContractsBoardStore();
             const hiringMarketStore = useHiringMarketStore();
+            const logStore = useLogStore();
 
+            this.setGameId(uuidv4());
+            this.currentGame = {
+                day: 0,
+                daysWithoutNewMercenaries: 0,
+                daysWithoutNewContracts: 0,
+            };
+            logStore.initLog([]);
             guildStore.initGuild({
                 title: guildTitle,
                 money: 100,
@@ -61,17 +87,20 @@ export const useGameStore = defineStore('game', {
             const contractsBoardStore = useContractsBoardStore();
             const hiringMarketStore = useHiringMarketStore();
 
+            const logStore = useLogStore();
             const gameDataToSave = {
                 guild: guildStore.$state,
                 contractsBoard: contractsBoardStore.$state,
                 hiringMarket: hiringMarketStore.$state,
-                updatedAt: Date.now()
+                updatedAt: Date.now(),
+                game: this.currentGame,
+                log: logStore.log,
             };
             const savedGamesRaw = localStorage.getItem('guildmaster-saves');
             const savedGamesData = savedGamesRaw ? JSON.parse(savedGamesRaw) : {};
             const gamesToSave = {
                 ...savedGamesData,
-                [guildStore.title]: gameDataToSave
+                [this.gameId!]: gameDataToSave
             };
             localStorage.setItem('guildmaster-saves', JSON.stringify(gamesToSave));
         },
@@ -79,37 +108,44 @@ export const useGameStore = defineStore('game', {
             const savedGamesRaw = localStorage.getItem('guildmaster-saves');
             this.savedGames = savedGamesRaw ? JSON.parse(savedGamesRaw) : {};
         },
-        initSavedGame (guildTitle: string) {
+        initSavedGame (gameId: string) {
             const guildStore = useGuildStore();
             const contractsBoardStore = useContractsBoardStore();
             const hiringMarketStore = useHiringMarketStore();
+            const logStore = useLogStore();
 
-            const gameToInit = this.savedGames[guildTitle];
+            const gameToInit = this.savedGames[gameId];
 
+            this.setGameId(gameId);
+            this.currentGame = { ...gameToInit.game };
             guildStore.initGuild(gameToInit.guild);
             contractsBoardStore.initContracts(gameToInit.contractsBoard.contracts);
             hiringMarketStore.initMercenaries(gameToInit.hiringMarket.mercenaries);
+            logStore.initLog(gameToInit.log ?? []);
 
             this.isGameLoaded = true;
         },
         initLastSavedGame () {
-            const sortedSavedGamesByDate = Object.values(this.savedGames)
-                .sort((a, b) => a.updatedAt - b.updatedAt);
-            this.initSavedGame(sortedSavedGamesByDate[0].guild.title);
+            const sortedSavedGamesByDate = Object.entries(this.savedGames)
+                .sort((a, b) => a[1].updatedAt - b[1].updatedAt);
+            this.initSavedGame(sortedSavedGamesByDate[0][0]);
 
         },
         finishDay () {
             const guildStore = useGuildStore();
 
             this.currentGame.day += 1;
+            const gameDay = this.currentGame.day;
 
-            this.addNewMercenariesToMarket();
-            this.addNewContractsToBoard();
+            this.addNewMercenariesToMarket(gameDay);
+            this.addNewContractsToBoard(gameDay);
             guildStore.paySalary();
-            guildStore.increaseContractsDays();
+            guildStore.applyDebtMoralePerDay(gameDay);
+            guildStore.increaseContractsDays(gameDay);
+            guildStore.processMercenariesWhoLeaveAtZeroMorale(gameDay);
 
         },
-        addNewMercenariesToMarket () {
+        addNewMercenariesToMarket (gameDay: number) {
             if (getChanceWithPity(0.33, this.currentGame.daysWithoutNewMercenaries)) {
                 const hiringMarketStore = useHiringMarketStore();
                 const logStore = useLogStore();
@@ -120,10 +156,10 @@ export const useGameStore = defineStore('game', {
                     [...guildStore.guildMercenariesIds, ...hiringMarketStore.mercenariesIds]
                 );
                 hiringMarketStore.addNewMultipleMercenaries(newMercenaries);
-                logStore.addNewMercenaryEventMultiple(newMercenaries);
+                logStore.addNewMercenaryEventMultiple(newMercenaries, gameDay);
             }
         },
-        addNewContractsToBoard () {
+        addNewContractsToBoard (gameDay: number) {
             if (getChanceWithPity(0.33, this.currentGame.daysWithoutNewContracts)) {
                 const contractsBoardStore = useContractsBoardStore();
                 const logStore = useLogStore();
@@ -134,7 +170,7 @@ export const useGameStore = defineStore('game', {
                     [...guildStore.guildContractsIds, ...contractsBoardStore.contractsIds]
                 );
                 contractsBoardStore.addNewMultipleContracts(newContracts.map(buildBoardContract));
-                logStore.addNewContractEvenMultiple(newContracts.map(buildBoardContract));
+                logStore.addNewContractEvenMultiple(newContracts.map(buildBoardContract), gameDay);
             }
         }
     }

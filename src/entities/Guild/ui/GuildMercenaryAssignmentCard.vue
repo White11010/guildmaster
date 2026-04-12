@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import type { GuildMercenary } from "@/entities/Guild";
+import {
+    getGuildMercenaryBasePower,
+    getGuildMercenaryContractPower,
+} from "@/entities/Guild/lib/getGuildMercenaryContractPower.ts";
 import { ClassesTitles, SpeciesTitles } from "@/entities/Mercenary";
 
 const props = defineProps<{
@@ -35,17 +39,17 @@ function onSelectButtonClick () {
         </div>
         <div class="guild-mercenary-assignment-card__info-block">
           <p>Базовая сила:</p>
-          <p>{{ mercenary.level * 25 }}</p>
+          <p>{{ getGuildMercenaryBasePower(props.mercenary) }}</p>
         </div>
       </div>
       <div class="guild-mercenary-assignment-card__full-info-block">
         <div class="guild-mercenary-assignment-card__info-block">
           <p>Уровень:</p>
-          <p>{{ mercenary.level }}</p>
+          <p>{{ props.mercenary.level }}</p>
         </div>
         <div class="guild-mercenary-assignment-card__info-block">
-          <p>Базовая сила:</p>
-          <p>{{ mercenary.level * 25 }}</p>
+          <p>Сила в контракте:</p>
+          <p>{{ getGuildMercenaryContractPower(props.mercenary).toFixed(1) }}</p>
         </div>
       </div>
     </div>

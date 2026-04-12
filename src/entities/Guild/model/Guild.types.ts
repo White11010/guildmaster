@@ -15,11 +15,19 @@ export interface GuildContract extends BoardContract {
     power: number;
     daysAfterTaken: number;
     daysInProgress: number;
+    /**
+     * Фактическая длительность выполнения (дней в работе до итога).
+     * Задаётся случайно при старте контракта, пользователю на доске не показывается.
+     */
+    actualDurationDays: number | null;
 }
 
 export interface GuildMercenary extends Mercenary {
     daysInGuild: number;
-    debt: number
+    debt: number;
+    /** Сколько дней подряд у наёмника есть долг по зарплате (debt > 0). */
+    debtDays: number;
+    moral: number;
 }
 
 export interface Guild {

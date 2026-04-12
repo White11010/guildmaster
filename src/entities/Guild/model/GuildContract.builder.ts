@@ -9,6 +9,7 @@ export function buildGuildContract (boardContract: BoardContract): GuildContract
         mercenaries: [],
         power: getRandomInt(75, 125) * boardContract.difficulty,
         daysAfterTaken: 0,
-        daysInProgress: 0
+        daysInProgress: 0,
+        actualDurationDays: null,
     };
 }

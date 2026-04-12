@@ -2,6 +2,7 @@
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
 import { useGameStore } from "@/entities/Game";
 import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
+import { router } from "@/app/providers";
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
@@ -30,12 +31,21 @@ const gameMenuItems: Array<GameMenuItem> = [
     title: 'Сохранить игру',
     handler () {
       gameStore.saveGame();
+      appModalStore.setCurrentModal(AppModals.SUCCESS_SAVE);
     }
   },
   {
     title: 'Загрузить игру',
     handler () {
       appModalStore.setCurrentModal(AppModals.LOAD_GAME);
+    }
+  },
+  {
+    title: 'Сохранить и выйти',
+    async handler () {
+      gameStore.saveGame();
+      await router.push('/');
+      emit('update:modelValue', false);
     }
   }
 ];

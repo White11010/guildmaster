@@ -19,4 +19,7 @@ html {
 button {
     border-radius: 0;
     padding: .5rem;
+    &:disabled {
+        cursor: default;
+    }
 }

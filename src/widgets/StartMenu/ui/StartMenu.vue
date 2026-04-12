@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import { useGameStore } from "@/entities/Game";
 import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
+import { computed } from "vue";
 
 const router = useRouter();
 
@@ -11,36 +12,42 @@ const appModalStore = useAppModalStore();
 interface StartMenuItem {
   title: string;
   handler: () => void;
+  disabled?: boolean;
 }
-const menuItems: Array<StartMenuItem> = [
-  {
-    title: 'Продолжить',
-    handler: () => {
-      gameStore.startNewGame({ guildTitle: 'Мандалорцы' });
-      router.push('/game');
+const menuItems = computed<Array<StartMenuItem>>(() => {
+  return [
+    {
+      title: 'Продолжить',
+      handler: () => {
+        if (gameStore.savedGamesIds.length) {
+          gameStore.initLastSavedGame();
+          router.push('/game');
+        }
+      },
+      disabled: gameStore.savedGamesIds.length === 0
+    },
+    {
+      title: 'Новая игра',
+      handler: () => {
+        appModalStore.setCurrentModal(AppModals.ENTER_NEW_GUILD_TITLE);
+      }
+    },
+    {
+      title: 'Загрузить игру',
+      handler: () => {
+        appModalStore.setCurrentModal(AppModals.LOAD_GAME);
+      }
+    },
+    {
+      title: 'Настройки',
+      handler: () => {
+        appModalStore.setCurrentModal(AppModals.CHANGE_SETTINGS);
+      }
     }
-  },
-  {
-    title: 'Новая игра',
-    handler: () => {
-      appModalStore.setCurrentModal(AppModals.ENTER_NEW_GUILD_TITLE);
-      // gameStore.startNewGame({ guildTitle: 'Мандалорцы' });
-      // router.push('/game');
-    }
-  },
-  {
-    title: 'Загрузить игру',
-    handler: () => {
-      router.push('/game');
-    }
-  },
-  {
-    title: 'Настройки',
-    handler: () => {
-      appModalStore.setCurrentModal(AppModals.CHANGE_SETTINGS);
-    }
-  }
-];
+  ];
+});
+
+gameStore.loadSavedGames();
 </script>
 
 <template>
@@ -48,6 +55,7 @@ const menuItems: Array<StartMenuItem> = [
     <button
       v-for="menuItem in menuItems"
       :key="menuItem.title"
+      :disabled="menuItem.disabled"
       class="start-menu__button"
       @click="menuItem.handler"
     >

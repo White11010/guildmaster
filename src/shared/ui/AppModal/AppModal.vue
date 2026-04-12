@@ -5,6 +5,9 @@ import { GameMenu } from "@/features/GameMenu";
 import { LoadGame } from "@/features/LoadGame";
 import { EnterNewGuildTitle } from "@/features/EnterNewGuildTitle";
 import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
+import { ChooseOnboarding } from "@/features/ChooseOnboarding";
+import { ShowSuccessfulSaveMessage } from "@/features/ShowMessage";
+import { OfferPayDebtsModal } from "@/features/OfferPayDebts";
 
 const appModalStore = useAppModalStore();
 
@@ -12,7 +15,10 @@ const modalComponentsMap: Record<AppModals, Component> = {
   [AppModals.CHANGE_SETTINGS]: ChangeSettings,
   [AppModals.GAME_MENU]: GameMenu,
   [AppModals.LOAD_GAME]: LoadGame,
-  [AppModals.ENTER_NEW_GUILD_TITLE]: EnterNewGuildTitle
+  [AppModals.ENTER_NEW_GUILD_TITLE]: EnterNewGuildTitle,
+  [AppModals.ONBOARDING]: ChooseOnboarding,
+  [AppModals.SUCCESS_SAVE]: ShowSuccessfulSaveMessage,
+  [AppModals.PAY_DEBTS]: OfferPayDebtsModal,
 };
 
 function onUpdateModelValue (value: boolean) {

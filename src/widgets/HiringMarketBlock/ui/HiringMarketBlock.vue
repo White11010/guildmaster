@@ -118,11 +118,14 @@ function onHireButtonClick () {
   }
 
   &__mercenary-info {
+    max-height: 100%;
+    overflow: auto;
     border-left: 2px solid black;
     height: 100%;
     padding: 0 1rem;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
   }
   &__mercenary-full-info {
     flex: 1;

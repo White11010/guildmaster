@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import type { BaseModalEmits, BaseModalProps } from "./BaseModal.types.ts";
+import { computed } from "vue";
 
 interface BaseModalPropsExtended extends BaseModalProps {
-  title: string;
+  title?: string;
   withCloseButton?: boolean;
 }
 const props = withDefaults(defineProps<BaseModalPropsExtended>(), {
   withCloseButton: false,
   width: 'auto',
-  height: 'auto'
+  height: 'auto',
+  maxHeight: 'auto',
+  title: ''
 });
 
 const emit = defineEmits<BaseModalEmits>();
@@ -16,6 +19,20 @@ const emit = defineEmits<BaseModalEmits>();
 function close () {
   emit('update:modelValue', false);
 }
+
+const getModalBodyStyles = computed(() => {
+  const styles: Record<string, string> = {};
+  if (props.title && props.height !== 'auto') {
+    styles.height = `calc(${props.height} - 81px - 1rem`;
+  }
+  if (props.title && props.maxHeight !== 'auto') {
+    styles.maxHeight = `calc(${props.maxHeight} - 81px - 1rem`;
+  }
+  if (!props.height && !props.maxHeight) {
+    styles.flex = '1';
+  }
+  return styles;
+});
 </script>
 
 <template>
@@ -28,9 +45,13 @@ function close () {
       :style="{
         width: props.width,
         height: props.height,
+        maxHeight: props.maxHeight,
       }"
     >
-      <header class="base-modal__header">
+      <header
+        v-if="props.title"
+        class="base-modal__header"
+      >
         <h3 class="base-modal__heading">
           {{ props.title }}
         </h3>
@@ -42,7 +63,10 @@ function close () {
           Закрыть
         </button>
       </header>
-      <div class="base-modal__body">
+      <div
+        class="base-modal__body"
+        :style="getModalBodyStyles"
+      >
         <slot v-bind="{ close }" />
       </div>
     </div>
@@ -60,6 +84,7 @@ function close () {
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
 
   &__window {
     border: 2px solid black;
@@ -79,6 +104,7 @@ function close () {
   &__heading {
     margin: 0;
     font-size: 2rem;
+    line-height: 2rem;
   }
 
   &__close-button {
@@ -87,7 +113,6 @@ function close () {
   }
 
   &__body {
-    flex: 1;
     padding: 1rem;
   }
 }
