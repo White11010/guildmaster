@@ -4,6 +4,7 @@ import { onMounted, ref, useTemplateRef } from "vue";
 import { useGameStore } from "@/entities/Game";
 import { useRouter } from "vue-router";
 import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
+import { ROUTE_PATH } from "@/shared/config";
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
@@ -17,7 +18,7 @@ const newGuildTitle = ref(null);
 async function onStartButtonClick () {
   if (newGuildTitle.value) {
     gameStore.startNewGame({ guildTitle: newGuildTitle.value });
-    await router.push('/game');
+    await router.push(ROUTE_PATH.GUILD);
     appModalStore.setCurrentModal(AppModals.ONBOARDING);
   }
 }
