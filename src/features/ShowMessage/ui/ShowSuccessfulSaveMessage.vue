@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
+import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
@@ -11,13 +11,8 @@ const emit = defineEmits<BaseModalEmits>();
     @update:model-value="emit('update:modelValue', $event)"
   >
     <div class="show-success-save-message">
-      <p class="show-success-save-message__text">
-        Игра сохранена
-      </p>
-      <button
-        class="show-success-save-message__button"
-        @click="emit('update:modelValue', false)"
-      >
+      <p class="show-success-save-message__text">Игра сохранена</p>
+      <button class="show-success-save-message__button" @click="emit('update:modelValue', false)">
         Продолжить
       </button>
     </div>

@@ -1,88 +1,77 @@
 <script setup lang="ts">
-import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
-import { useGuildStore, type GuildMercenary } from "@/entities/Guild";
-import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
+import { type GuildMercenary, useGuildStore } from '@/entities/Guild';
+import { storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
 
-interface Props extends BaseModalProps {}
-const props = defineProps<Props>();
+const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
 
 const guildStore = useGuildStore();
 const { money } = storeToRefs(guildStore);
 
-const mercenariesWithDebt = computed(() =>
-    guildStore.mercenaries.filter((m) => m.debt > 0),
-);
+const mercenariesWithDebt = computed(() => guildStore.mercenaries.filter((m) => m.debt > 0));
 
 /** Жадно: сначала меньшие долги, пока хватает золота — максимум полных погашений. */
-function buildGreedySelection(
-    list: Array<GuildMercenary>,
-    available: number,
-): Set<string> {
-    const sorted = [...list].sort((a, b) => a.debt - b.debt);
-    const ids = new Set<string>();
-    let sum = 0;
-    for (const m of sorted) {
-        if (sum + m.debt <= available) {
-            ids.add(m.id);
-            sum += m.debt;
-        }
+function buildGreedySelection(list: GuildMercenary[], available: number): Set<string> {
+  const sorted = [...list].sort((a, b) => a.debt - b.debt);
+  const ids = new Set<string>();
+  let sum = 0;
+  for (const m of sorted) {
+    if (sum + m.debt <= available) {
+      ids.add(m.id);
+      sum += m.debt;
     }
-    return ids;
+  }
+  return ids;
 }
 
-const selectedIds = ref<Set<string>>(new Set());
+const selectedIds = ref(new Set());
 
 watch(
-    () => props.modelValue,
-    (open) => {
-        if (open) {
-            selectedIds.value = buildGreedySelection(
-                mercenariesWithDebt.value,
-                guildStore.money,
-            );
-        }
-    },
+  () => props.modelValue,
+  (open) => {
+    if (open) {
+      selectedIds.value = buildGreedySelection(mercenariesWithDebt.value, guildStore.money);
+    }
+  }
 );
 
 function toggleId(id: string) {
-    const next = new Set(selectedIds.value);
-    if (next.has(id)) {
-        next.delete(id);
-    } else {
-        next.add(id);
-    }
-    selectedIds.value = next;
+  const next = new Set(selectedIds.value);
+  if (next.has(id)) {
+    next.delete(id);
+  } else {
+    next.add(id);
+  }
+  selectedIds.value = next;
 }
 
 const selectedTotal = computed(() =>
-    mercenariesWithDebt.value
-        .filter((m) => selectedIds.value.has(m.id))
-        .reduce((s, m) => s + m.debt, 0),
+  mercenariesWithDebt.value
+    .filter((m) => selectedIds.value.has(m.id))
+    .reduce((s, m) => s + m.debt, 0)
 );
 
 const canConfirm = computed(
-    () =>
-        selectedTotal.value > 0 &&
-        selectedTotal.value <= guildStore.money,
+  () => selectedTotal.value > 0 && selectedTotal.value <= guildStore.money
 );
 
 function onConfirm() {
-    if (!canConfirm.value) {
-        return;
-    }
-    const ordered = mercenariesWithDebt.value
-        .filter((m) => selectedIds.value.has(m.id))
-        .sort((a, b) => a.debt - b.debt);
-    for (const m of ordered) {
-        guildStore.payMercenaryDebt(m.id);
-    }
-    emit("update:modelValue", false);
+  if (!canConfirm.value) {
+    return;
+  }
+  const ordered = mercenariesWithDebt.value
+    .filter((m) => selectedIds.value.has(m.id))
+    .sort((a, b) => a.debt - b.debt);
+  for (const m of ordered) {
+    guildStore.payMercenaryDebt(m.id);
+  }
+  emit('update:modelValue', false);
 }
 
 function onSkip() {
-    emit("update:modelValue", false);
+  emit('update:modelValue', false);
 }
 </script>
 
@@ -97,21 +86,13 @@ function onSkip() {
   >
     <div class="offer-pay-debts">
       <p class="offer-pay-debts__intro">
-        В казне <strong>{{ money }}</strong> золота. Отметьте, чьи долги погасить целиком
-        (можно не всех, если не хватает денег).
+        В казне <strong>{{ money }}</strong> золота. Отметьте, чьи долги погасить целиком (можно не
+        всех, если не хватает денег).
       </p>
       <ul class="offer-pay-debts__list">
-        <li
-          v-for="m in mercenariesWithDebt"
-          :key="m.id"
-          class="offer-pay-debts__row"
-        >
+        <li v-for="m in mercenariesWithDebt" :key="m.id" class="offer-pay-debts__row">
           <label class="offer-pay-debts__label">
-            <input
-              type="checkbox"
-              :checked="selectedIds.has(m.id)"
-              @change="toggleId(m.id)"
-            >
+            <input type="checkbox" :checked="selectedIds.has(m.id)" @change="toggleId(m.id)" />
             <span class="offer-pay-debts__name">{{ m.name }}</span>
             <span class="offer-pay-debts__debt">долг: {{ m.debt }}</span>
           </label>
@@ -119,10 +100,9 @@ function onSkip() {
       </ul>
       <p class="offer-pay-debts__total">
         К списанию: {{ selectedTotal }} / доступно {{ money }}
-        <span
-          v-if="selectedTotal > money"
-          class="offer-pay-debts__warn"
-        > — недостаточно золота</span>
+        <span v-if="selectedTotal > money" class="offer-pay-debts__warn">
+          — недостаточно золота</span
+        >
       </p>
       <div class="offer-pay-debts__actions">
         <button
@@ -133,13 +113,7 @@ function onSkip() {
         >
           Погасить выбранные
         </button>
-        <button
-          type="button"
-          class="offer-pay-debts__btn"
-          @click="onSkip"
-        >
-          Пропустить
-        </button>
+        <button type="button" class="offer-pay-debts__btn" @click="onSkip">Пропустить</button>
       </div>
     </div>
   </base-modal>
@@ -181,7 +155,7 @@ function onSkip() {
     border-radius: 4px;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.04);
+      background: color-mix(in srgb, var(--color-black) 4%, transparent);
     }
 
     input {
@@ -205,7 +179,7 @@ function onSkip() {
   }
 
   &__warn {
-    color: #a52a2a;
+    color: color-mix(in srgb, var(--color-black) 75%, var(--color-white));
     font-weight: 600;
   }
 
@@ -220,13 +194,13 @@ function onSkip() {
     padding: 0.5rem 1rem;
     font: inherit;
     cursor: pointer;
-    border: 1px solid #333;
-    background: #fff;
+    border: 1px solid color-mix(in srgb, var(--color-black) 70%, var(--color-white));
+    background: var(--color-white);
 
     &--primary {
-      background: #1a472a;
-      color: #fff;
-      border-color: #1a472a;
+      background: var(--color-black);
+      color: var(--color-white);
+      border-color: var(--color-black);
     }
 
     &:disabled {

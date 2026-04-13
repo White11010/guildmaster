@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { GuildMercenary } from "@/entities/Guild";
+import type { GuildMercenary } from '@/entities/Guild';
 import {
-    getGuildMercenaryBasePower,
-    getGuildMercenaryContractPower,
-} from "@/entities/Guild/lib/getGuildMercenaryContractPower.ts";
-import { ClassesTitles, SpeciesTitles } from "@/entities/Mercenary";
+  getGuildMercenaryBasePower,
+  getGuildMercenaryContractPower
+} from '@/entities/Guild/lib/getGuildMercenaryContractPower.ts';
+import { ClassesTitles, SpeciesTitles } from '@/entities/Mercenary';
 
 const props = defineProps<{
   mercenary: GuildMercenary;
@@ -15,7 +15,7 @@ const emit = defineEmits<{
   (e: 'click:cancel', mercenary: GuildMercenary): void;
 }>();
 
-function onSelectButtonClick () {
+function onSelectButtonClick() {
   if (props.isSelected) {
     emit('click:cancel', props.mercenary);
   } else {
@@ -54,10 +54,7 @@ function onSelectButtonClick () {
       </div>
     </div>
     <div class="guild-mercenary-assignment-card__footer">
-      <button
-        class="guild-mercenary-assignment-card__button"
-        @click="onSelectButtonClick"
-      >
+      <button class="guild-mercenary-assignment-card__button" @click="onSelectButtonClick">
         {{ props.isSelected ? 'Отменить' : 'Выбрать' }}
       </button>
     </div>
@@ -66,8 +63,8 @@ function onSelectButtonClick () {
 
 <style scoped lang="scss">
 .guild-mercenary-assignment-card {
-  border: 1px solid black;
-  padding: .5rem;
+  border: 1px solid var(--color-black);
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -76,7 +73,7 @@ function onSelectButtonClick () {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   &__full-info-block {
@@ -88,7 +85,7 @@ function onSelectButtonClick () {
   &__info-block {
     display: flex;
     align-items: center;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   &__footer {

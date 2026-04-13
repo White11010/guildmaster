@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
-import { useGameStore } from "@/entities/Game";
-import { useRouter } from "vue-router";
+import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
+import { useGameStore } from '@/entities/Game';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
@@ -10,7 +10,7 @@ const router = useRouter();
 const gameStore = useGameStore();
 gameStore.loadSavedGames();
 
-function onLoadGameClick (gameId: string) {
+function onLoadGameClick(gameId: string) {
   gameStore.initSavedGame(gameId);
   router.push('/game');
   emit('update:modelValue', false);
@@ -25,10 +25,7 @@ function onLoadGameClick (gameId: string) {
     max-height="500px"
     @update:model-value="emit('update:modelValue', $event)"
   >
-    <div
-      v-if="gameStore.savedGamesIds.length"
-      class="load-game"
-    >
+    <div v-if="gameStore.savedGamesIds.length" class="load-game">
       <div
         v-for="gameId in gameStore.savedGamesIds"
         :key="gameId"
@@ -43,13 +40,8 @@ function onLoadGameClick (gameId: string) {
         </p>
       </div>
     </div>
-    <div
-      v-else
-      class="load-game__empty"
-    >
-      <p>
-        Сохраненные игры не найдены
-      </p>
+    <div v-else class="load-game__empty">
+      <p>Сохраненные игры не найдены</p>
     </div>
   </base-modal>
 </template>
@@ -63,19 +55,19 @@ function onLoadGameClick (gameId: string) {
   overflow: auto;
 
   &__game {
-    padding: .5rem;
-    border: 1px solid black;
+    padding: 0.5rem;
+    border: 1px solid var(--color-black);
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
     cursor: pointer;
     &:hover {
-      background-color: rgba(black, .1);
+      background-color: color-mix(in srgb, var(--color-black) 10%, var(--color-white));
     }
   }
 
   &__game-guild-title {
-    fill-size: 1.5rem;
+    font-size: 1.5rem;
   }
 
   &__empty {

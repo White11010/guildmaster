@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { HiringMarketBlock } from '@/widgets/HiringMarketBlock';
-import { GuildBlock } from "@/entities/Guild";
-import { GuildContractsBlock } from "@/widgets/GuildContractsBlock";
-import { GuildMercenariesBlock } from "@/widgets/GuildMercenariesBlock";
-import { ContractsBlock } from "@/widgets/ContractsBlock";
-import { useGameStore } from "@/entities/Game";
-import { useRouter } from "vue-router";
-import { LogBlock } from "@/widgets/LogBlock";
+import { GuildBlock } from '@/entities/Guild';
+import { GuildContractsBlock } from '@/widgets/GuildContractsBlock';
+import { GuildMercenariesBlock } from '@/widgets/GuildMercenariesBlock';
+import { ContractsBlock } from '@/widgets/ContractsBlock';
+import { useGameStore } from '@/entities/Game';
+import { useRouter } from 'vue-router';
+import { LogBlock } from '@/widgets/LogBlock';
 
 const gameStore = useGameStore();
 const router = useRouter();
 
-function loadLastSavedGame () {
+function loadLastSavedGame() {
   if (!gameStore.isGameLoaded) {
     gameStore.loadSavedGames();
 
@@ -54,8 +54,8 @@ loadLastSavedGame();
     grid-template-rows: 1fr 1fr 1fr;
     margin: 0 auto;
     padding: 2rem;
-    border: 4px solid black;
-    background-color: rgb(black, .1);
+    border: 4px solid var(--color-black);
+    background-color: color-mix(in srgb, var(--color-black) 10%, var(--color-white));
   }
 }
 </style>

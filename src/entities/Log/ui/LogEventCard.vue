@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LogEvent } from "@/entities/Log";
+import type { LogEvent } from '@/entities/Log';
 
 const props = defineProps<{
   event: LogEvent;
@@ -17,7 +17,6 @@ const props = defineProps<{
 <style scoped lang="scss">
 .log-event-card {
   &__text {
-
   }
 }
 </style>

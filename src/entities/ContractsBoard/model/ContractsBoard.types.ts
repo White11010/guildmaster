@@ -1,11 +1,11 @@
-import type { Contract } from "@/entities/Contract";
+import type { Contract } from '@/entities/Contract';
 
 export interface BoardContract extends Contract {
-    availableOnBoardDuring: number;
-    isUrgent: boolean;
-    daysToStart: number;
+  availableOnBoardDuring: number;
+  isUrgent: boolean;
+  daysToStart: number;
 }
 
 export interface ContractsBoard {
-    contracts: Array<BoardContract>;
+  contracts: BoardContract[];
 }

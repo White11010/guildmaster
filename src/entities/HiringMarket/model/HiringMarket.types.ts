@@ -1,6 +1,6 @@
-import type { Mercenary } from "@/entities/Mercenary";
+import type { Mercenary } from '@/entities/Mercenary';
 
 export interface HiringMarket {
-    title: string;
-    mercenaries: Array<Mercenary>;
+  title: string;
+  mercenaries: Mercenary[];
 }

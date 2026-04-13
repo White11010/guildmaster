@@ -1,12 +1,15 @@
 <script setup lang="ts">
-const props = withDefaults(defineProps<{
-  title: string,
-  emptyText?: string
-  empty?: boolean
-}>(), {
-  emptyText: '',
-  empty: false
-});
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    emptyText?: string;
+    empty?: boolean;
+  }>(),
+  {
+    emptyText: '',
+    empty: false
+  }
+);
 </script>
 
 <template>
@@ -17,10 +20,7 @@ const props = withDefaults(defineProps<{
       </h1>
     </header>
     <div class="base-content-block__content">
-      <div
-        v-if="props.empty && props.emptyText"
-        class="base-content-block__empty"
-      >
+      <div v-if="props.empty && props.emptyText" class="base-content-block__empty">
         <p>{{ props.emptyText }}</p>
       </div>
       <slot v-else />
@@ -33,12 +33,11 @@ const props = withDefaults(defineProps<{
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 4px solid black;
+  border: 4px solid var(--color-black);
   padding: 1rem;
-  background-color: white;
+  background-color: var(--color-white);
 
   &__header {
-
   }
 
   &__title {

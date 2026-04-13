@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
+import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
 
-function onSkipOnboardingButtonClick () {
+function onSkipOnboardingButtonClick() {
   emit('update:modelValue', false);
 }
-function onStartOnboardingButtonClick () {
+function onStartOnboardingButtonClick() {
   emit('update:modelValue', false);
 }
 </script>
@@ -20,22 +20,15 @@ function onStartOnboardingButtonClick () {
   >
     <div class="choose-onboarding">
       <p class="choose-onboarding__text">
-        Вы — глава гильдии наёмников, и перед вами новое начало.
-        У вас есть ресурсы, люди и возможности, но ни один путь не гарантирует успеха.
-        Каждый выбор будет менять ситуацию — иногда незаметно, иногда необратимо.
-        Посмотрим, как далеко вы сможете зайти.
+        Вы — глава гильдии наёмников, и перед вами новое начало. У вас есть ресурсы, люди и
+        возможности, но ни один путь не гарантирует успеха. Каждый выбор будет менять ситуацию —
+        иногда незаметно, иногда необратимо. Посмотрим, как далеко вы сможете зайти.
       </p>
       <div class="choose-onboarding__footer">
-        <button
-          class="choose-onboarding__button"
-          @click="onSkipOnboardingButtonClick"
-        >
+        <button class="choose-onboarding__button" @click="onSkipOnboardingButtonClick">
           Пропустить обучение
         </button>
-        <button
-          class="choose-onboarding__button"
-          @click="onStartOnboardingButtonClick"
-        >
+        <button class="choose-onboarding__button" @click="onStartOnboardingButtonClick">
           Начать обучение
         </button>
       </div>

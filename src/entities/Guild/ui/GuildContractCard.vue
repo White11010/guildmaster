@@ -1,49 +1,43 @@
 <script setup lang="ts">
-import { getContractEstimatedDurationDays } from "@/entities/Contract";
+import { getContractEstimatedDurationDays } from '@/entities/Contract';
 import {
-    type GuildContract,
-    GuildContractStates,
-    GuildContractStatesTitles,
-} from "@/entities/Guild";
-import { computed } from "vue";
+  type GuildContract,
+  GuildContractStates,
+  GuildContractStatesTitles
+} from '@/entities/Guild';
+import { computed } from 'vue';
 
 const props = defineProps<{
-    contract: GuildContract;
+  contract: GuildContract;
 }>();
-const emit = defineEmits<{
-    (e: "click:start"): void;
-}>();
+const emit = defineEmits<(e: 'click:start') => void>();
 
-const boardEstimateDays = computed(() =>
-    getContractEstimatedDurationDays(props.contract.duration),
-);
+const boardEstimateDays = computed(() => getContractEstimatedDurationDays(props.contract.duration));
 
 const durationNeeded = computed(
-    () => props.contract.actualDurationDays ?? props.contract.duration[0],
+  () => props.contract.actualDurationDays ?? props.contract.duration[0]
 );
 
 const daysUntilEnd = computed(() => {
-    if (props.contract.state !== GuildContractStates.IN_PROGRESS) {
-        return null;
-    }
-    return Math.max(0, durationNeeded.value - props.contract.daysInProgress);
+  if (props.contract.state !== GuildContractStates.IN_PROGRESS) {
+    return null;
+  }
+  return Math.max(0, durationNeeded.value - props.contract.daysInProgress);
 });
 
 /** Дольше оценки с доски (среднее min–max duration), пока контракт ещё в работе. */
 const daysBeyondBoardEstimate = computed(() => {
-    if (props.contract.state !== GuildContractStates.IN_PROGRESS) {
-        return null;
-    }
-    const diff = props.contract.daysInProgress - boardEstimateDays.value;
-    if (diff <= 0) {
-        return null;
-    }
-    return Math.max(1, Math.ceil(diff));
+  if (props.contract.state !== GuildContractStates.IN_PROGRESS) {
+    return null;
+  }
+  const diff = props.contract.daysInProgress - boardEstimateDays.value;
+  if (diff <= 0) {
+    return null;
+  }
+  return Math.max(1, Math.ceil(diff));
 });
 
-const missionMercenaryNames = computed(() =>
-    props.contract.mercenaries.map((m) => m.name),
-);
+const missionMercenaryNames = computed(() => props.contract.mercenaries.map((m) => m.name));
 </script>
 
 <template>
@@ -61,27 +55,15 @@ const missionMercenaryNames = computed(() =>
         Дней, чтобы начать: {{ props.contract.daysToStart - props.contract.daysAfterTaken }}
       </p>
       <template v-if="props.contract.state === GuildContractStates.IN_PROGRESS">
-        <p v-if="daysUntilEnd !== null">
-          Дней до завершения (по плану): {{ daysUntilEnd }}
+        <p v-if="daysUntilEnd !== null">Дней до завершения (по плану): {{ daysUntilEnd }}</p>
+        <p v-if="daysBeyondBoardEstimate !== null" class="contract-guild-card__warn">
+          Уже дольше оценочного срока с доски (~{{ boardEstimateDays }} дн.) на
+          {{ daysBeyondBoardEstimate }} дн.
         </p>
-        <p
-          v-if="daysBeyondBoardEstimate !== null"
-          class="contract-guild-card__warn"
-        >
-          Уже дольше оценочного срока с доски (~{{ boardEstimateDays }} дн.) на {{ daysBeyondBoardEstimate }} дн.
-        </p>
-        <div
-          v-if="missionMercenaryNames.length"
-          class="contract-guild-card__squad"
-        >
-          <p class="contract-guild-card__squad-label">
-            На задании:
-          </p>
+        <div v-if="missionMercenaryNames.length" class="contract-guild-card__squad">
+          <p class="contract-guild-card__squad-label">На задании:</p>
           <ul class="contract-guild-card__squad-list">
-            <li
-              v-for="(name, index) in missionMercenaryNames"
-              :key="`${name}-${index}`"
-            >
+            <li v-for="(name, index) in missionMercenaryNames" :key="`${name}-${index}`">
               {{ name }}
             </li>
           </ul>
@@ -101,11 +83,11 @@ const missionMercenaryNames = computed(() =>
 
 <style scoped lang="scss">
 .contract-guild-card {
-  border: 1px solid black;
-  padding: .5rem;
+  border: 1px solid var(--color-black);
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
   align-items: stretch;
 
   &__head {
@@ -113,7 +95,7 @@ const missionMercenaryNames = computed(() =>
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   &__title {
@@ -130,7 +112,7 @@ const missionMercenaryNames = computed(() =>
   &__meta {
     display: flex;
     flex-direction: column;
-    gap: .35rem;
+    gap: 0.35rem;
     font-size: 0.95rem;
 
     p {
@@ -139,16 +121,16 @@ const missionMercenaryNames = computed(() =>
   }
 
   &__warn {
-    color: #8b4513;
+    color: color-mix(in srgb, var(--color-black) 70%, var(--color-white));
     font-weight: 600;
   }
 
   &__squad {
-    margin-top: .25rem;
+    margin-top: 0.25rem;
   }
 
   &__squad-label {
-    margin: 0 0 .2rem;
+    margin: 0 0 0.2rem;
     font-weight: 600;
   }
 
@@ -159,7 +141,7 @@ const missionMercenaryNames = computed(() =>
 
   &__start-button {
     align-self: flex-start;
-    margin-top: .25rem;
+    margin-top: 0.25rem;
     font-size: 1rem;
   }
 }

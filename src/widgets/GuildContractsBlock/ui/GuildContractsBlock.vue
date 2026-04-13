@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
-import { type GuildContract, GuildContractCard, useGuildStore } from "@/entities/Guild";
-import { StartContract } from "@/features/StartContract";
-import { ref } from "vue";
+import { BaseContentBlock } from '@/shared/ui/BaseContentBlock';
+import { type GuildContract, GuildContractCard, useGuildStore } from '@/entities/Guild';
+import { StartContract } from '@/features/StartContract';
+import { ref } from 'vue';
 
 const guildStore = useGuildStore();
 
 const isStartContractModalOpen = ref(false);
 const contractToStart = ref<GuildContract | null>(null);
 
-function onStartContractButtonClick (contract: GuildContract): void {
+function onStartContractButtonClick(contract: GuildContract): void {
   contractToStart.value = contract;
   isStartContractModalOpen.value = true;
 }
@@ -28,18 +28,12 @@ function onStartContractButtonClick (contract: GuildContract): void {
         @click:start="onStartContractButtonClick(contract)"
       />
     </div>
-    <div
-      v-else
-      class="guild-mercenaries-block__empty"
-    >
+    <div v-else class="guild-mercenaries-block__empty">
       <p>Пока у вас нет контрактов</p>
     </div>
   </base-content-block>
 
-  <start-contract
-    v-model="isStartContractModalOpen"
-    :contract="contractToStart"
-  />
+  <start-contract v-model="isStartContractModalOpen" :contract="contractToStart" />
 </template>
 
 <style scoped lang="scss">
@@ -48,6 +42,6 @@ function onStartContractButtonClick (contract: GuildContract): void {
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
-import { useGuildStore, GuildMercenaryCard } from "@/entities/Guild";
+import { BaseContentBlock } from '@/shared/ui/BaseContentBlock';
+import { GuildMercenaryCard, useGuildStore } from '@/entities/Guild';
 
 const guildStore = useGuildStore();
 </script>
@@ -17,10 +17,7 @@ const guildStore = useGuildStore();
         :mercenary="mercenary"
       />
     </div>
-    <div
-      v-else
-      class="guild-mercenaries-block__empty"
-    >
+    <div v-else class="guild-mercenaries-block__empty">
       <p>Пока у вас нет наемников</p>
     </div>
   </base-content-block>
@@ -32,6 +29,6 @@ const guildStore = useGuildStore();
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 </style>

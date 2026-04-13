@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
-import { GuildContractStates, useGuildStore } from "@/entities/Guild";
-import { BaseLabelValueBlock } from "@/shared/ui/BaseLabelValueBlock";
+import { BaseContentBlock } from '@/shared/ui/BaseContentBlock';
+import { GuildContractStates, useGuildStore } from '@/entities/Guild';
+import { BaseLabelValueBlock } from '@/shared/ui/BaseLabelValueBlock';
 
 const guildStore = useGuildStore();
 </script>
@@ -13,28 +13,28 @@ const guildStore = useGuildStore();
         {{ guildStore.title }}
       </p>
       <div class="guild-block__gold-block">
-        <p class="guild-block__gold-block-label">
-          Золото:
-        </p>
+        <p class="guild-block__gold-block-label">Золото:</p>
         <p class="guild-block__gold-block-value">
           {{ guildStore.money }}
         </p>
       </div>
       <div class="guild-block__info">
+        <base-label-value-block :value="guildStore.fame" label="Известность" />
+        <base-label-value-block :value="guildStore.reputation" label="Репутация" />
         <base-label-value-block
-          :value="guildStore.fame"
-          label="Известность"
-        />
-        <base-label-value-block
-          :value="guildStore.reputation"
-          label="Репутация"
-        />
-        <base-label-value-block
-          :value="guildStore.currentContracts.filter(contract => contract.state === GuildContractStates.COMPLETED).length"
+          :value="
+            guildStore.currentContracts.filter(
+              (contract) => contract.state === GuildContractStates.COMPLETED
+            ).length
+          "
           label="Контрактов выполнено"
         />
         <base-label-value-block
-          :value="guildStore.currentContracts.filter(contract => [GuildContractStates.FAILED, GuildContractStates.OVERDUE].includes(contract.state)).length"
+          :value="
+            guildStore.currentContracts.filter((contract) =>
+              [GuildContractStates.FAILED, GuildContractStates.OVERDUE].includes(contract.state)
+            ).length
+          "
           label="Контрактов провалено"
         />
       </div>
@@ -56,7 +56,7 @@ const guildStore = useGuildStore();
   &__gold-block {
     display: flex;
     align-items: center;
-    gap: .5rem;
+    gap: 0.5rem;
   }
   &__gold-block-label {
     font-size: 1.5rem;

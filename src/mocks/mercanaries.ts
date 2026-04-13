@@ -1,134 +1,141 @@
-import { Alignments, Classes, Genders, type Mercenary, Species } from "@/entities/Mercenary";
+import { Alignments, Classes, Genders, type Mercenary, Species } from '@/entities/Mercenary';
 
 export const mercenaries: Mercenary[] = [
-    {
-        id: "1",
-        name: 'Дариус "Стальной Кулак"',
-        age: 34,
-        gender: Genders.MALE,
-        background: "Дариус с детства тренировался в оружейной кузнице. Всегда держит дисциплину и любит честные поединки.",
-        species: Species.HUMAN,
-        class: Classes.FIGHTER,
-        level: 3,
-        alignment: Alignments.LAWFUL_NEUTRAL,
-        salary: 8,
-        price: 20
-    },
-    {
-        id: "2",
-        name: 'Элиана "Теневой Шепот"',
-        age: 27,
-        gender: Genders.FEMALE,
-        background: "Элиана всегда была ловка и бесшумна. Любит тихие задания и проникновения в чужие владения.",
-        species: Species.ELF,
-        class: Classes.ROGUE,
-        level: 2,
-        alignment: Alignments.CHAOTIC_NEUTRAL,
-        salary: 6,
-        price: 15
-    },
-    {
-        id: "3",
-        name: 'Борин "Громобой"',
-        age: 41,
-        gender: Genders.MALE,
-        background: "Борин вырос среди горных крепостей. Его удары молотом знамениты на всю округу.",
-        species: Species.DWARF,
-        class: Classes.BARBARIAN,
-        level: 4,
-        alignment: Alignments.CHAOTIC_GOOD,
-        salary: 9,
-        price: 22
-    },
-    {
-        id: "4",
-        name: 'Лиран "Стрелок"',
-        age: 29,
-        gender: Genders.MALE,
-        background: "Лиран с детства охотился в лесах. Прекрасно видит цель издалека и метко стреляет.",
-        species: Species.ELF,
-        class: Classes.RANGER,
-        level: 3,
-        alignment: Alignments.TRUE_NEUTRAL,
-        salary: 7,
-        price: 30
-    },
-    {
-        id: "5",
-        name: 'Селина "Пламенная"',
-        age: 25,
-        gender: Genders.FEMALE,
-        background: "Селина изучала магию огня с юных лет. Её заклинания оставляют след пепла за собой.",
-        species: Species.HUMAN,
-        class: Classes.WIZARD,
-        level: 2,
-        alignment: Alignments.NEUTRAL_GOOD,
-        salary: 6,
-        price: 25
-    },
-    {
-        id: "6",
-        name: 'Гаррик "Клык"',
-        age: 38,
-        gender: Genders.MALE,
-        background: "Гаррик привык к опасной жизни наемника. Его звериная ярость делает его непобедимым в ближнем бою.",
-        species: Species.HUMAN,
-        class: Classes.BARBARIAN,
-        level: 5,
-        alignment: Alignments.CHAOTIC_NEUTRAL,
-        salary: 10,
-        price: 40
-    },
-    {
-        id: "7",
-        name: 'Айрин "Тихий Шаг"',
-        age: 31,
-        gender: Genders.FEMALE,
-        background: "Айрин мастерски передвигается бесшумно. Она предпочитает разведку и ловушки вместо прямого боя.",
-        species: Species.ELF,
-        class: Classes.ROGUE,
-        level: 4,
-        alignment: Alignments.CHAOTIC_GOOD,
-        salary: 8,
-        price: 30
-    },
-    {
-        id: "8",
-        name: 'Торвин "Горный Молот"',
-        age: 45,
-        gender: Genders.MALE,
-        background: "Торвин никогда не покидает кузницу. Любой враг дрожит перед его тяжелым молотом.",
-        species: Species.DWARF,
-        class: Classes.FIGHTER,
-        level: 5,
-        alignment: Alignments.LAWFUL_NEUTRAL,
-        salary: 9,
-        price: 45
-    },
-    {
-        id: "9",
-        name: 'Эльвира "Лунная Стрела"',
-        age: 28,
-        gender: Genders.FEMALE,
-        background: "Эльвира выросла среди лесных деревень. Она всегда точна и изящна, словно сама луна ведет её стрелу.",
-        species: Species.ELF,
-        class: Classes.RANGER,
-        level: 3,
-        alignment: Alignments.NEUTRAL_GOOD,
-        salary: 7,
-        price: 28
-    },
-    {
-        id: "10",
-        name: 'Фенрик "Зловещий"',
-        age: 33,
-        gender: Genders.MALE,
-        background: "Фенрик изучал темные искусства, но применяет их наемно. Его заклинания пугают даже самых храбрых.",
-        species: Species.HUMAN,
-        class: Classes.WIZARD,
-        level: 4,
-        alignment: Alignments.NEUTRAL_EVIL,
-        salary: 8,
-        price: 32
-    }
+  {
+    id: '1',
+    name: 'Дариус "Стальной Кулак"',
+    age: 34,
+    gender: Genders.MALE,
+    background:
+      'Дариус с детства тренировался в оружейной кузнице. Всегда держит дисциплину и любит честные поединки.',
+    species: Species.HUMAN,
+    class: Classes.FIGHTER,
+    level: 3,
+    alignment: Alignments.LAWFUL_NEUTRAL,
+    salary: 8,
+    price: 20
+  },
+  {
+    id: '2',
+    name: 'Элиана "Теневой Шепот"',
+    age: 27,
+    gender: Genders.FEMALE,
+    background:
+      'Элиана всегда была ловка и бесшумна. Любит тихие задания и проникновения в чужие владения.',
+    species: Species.ELF,
+    class: Classes.ROGUE,
+    level: 2,
+    alignment: Alignments.CHAOTIC_NEUTRAL,
+    salary: 6,
+    price: 15
+  },
+  {
+    id: '3',
+    name: 'Борин "Громобой"',
+    age: 41,
+    gender: Genders.MALE,
+    background: 'Борин вырос среди горных крепостей. Его удары молотом знамениты на всю округу.',
+    species: Species.DWARF,
+    class: Classes.BARBARIAN,
+    level: 4,
+    alignment: Alignments.CHAOTIC_GOOD,
+    salary: 9,
+    price: 22
+  },
+  {
+    id: '4',
+    name: 'Лиран "Стрелок"',
+    age: 29,
+    gender: Genders.MALE,
+    background: 'Лиран с детства охотился в лесах. Прекрасно видит цель издалека и метко стреляет.',
+    species: Species.ELF,
+    class: Classes.RANGER,
+    level: 3,
+    alignment: Alignments.TRUE_NEUTRAL,
+    salary: 7,
+    price: 30
+  },
+  {
+    id: '5',
+    name: 'Селина "Пламенная"',
+    age: 25,
+    gender: Genders.FEMALE,
+    background:
+      'Селина изучала магию огня с юных лет. Её заклинания оставляют след пепла за собой.',
+    species: Species.HUMAN,
+    class: Classes.WIZARD,
+    level: 2,
+    alignment: Alignments.NEUTRAL_GOOD,
+    salary: 6,
+    price: 25
+  },
+  {
+    id: '6',
+    name: 'Гаррик "Клык"',
+    age: 38,
+    gender: Genders.MALE,
+    background:
+      'Гаррик привык к опасной жизни наемника. Его звериная ярость делает его непобедимым в ближнем бою.',
+    species: Species.HUMAN,
+    class: Classes.BARBARIAN,
+    level: 5,
+    alignment: Alignments.CHAOTIC_NEUTRAL,
+    salary: 10,
+    price: 40
+  },
+  {
+    id: '7',
+    name: 'Айрин "Тихий Шаг"',
+    age: 31,
+    gender: Genders.FEMALE,
+    background:
+      'Айрин мастерски передвигается бесшумно. Она предпочитает разведку и ловушки вместо прямого боя.',
+    species: Species.ELF,
+    class: Classes.ROGUE,
+    level: 4,
+    alignment: Alignments.CHAOTIC_GOOD,
+    salary: 8,
+    price: 30
+  },
+  {
+    id: '8',
+    name: 'Торвин "Горный Молот"',
+    age: 45,
+    gender: Genders.MALE,
+    background: 'Торвин никогда не покидает кузницу. Любой враг дрожит перед его тяжелым молотом.',
+    species: Species.DWARF,
+    class: Classes.FIGHTER,
+    level: 5,
+    alignment: Alignments.LAWFUL_NEUTRAL,
+    salary: 9,
+    price: 45
+  },
+  {
+    id: '9',
+    name: 'Эльвира "Лунная Стрела"',
+    age: 28,
+    gender: Genders.FEMALE,
+    background:
+      'Эльвира выросла среди лесных деревень. Она всегда точна и изящна, словно сама луна ведет её стрелу.',
+    species: Species.ELF,
+    class: Classes.RANGER,
+    level: 3,
+    alignment: Alignments.NEUTRAL_GOOD,
+    salary: 7,
+    price: 28
+  },
+  {
+    id: '10',
+    name: 'Фенрик "Зловещий"',
+    age: 33,
+    gender: Genders.MALE,
+    background:
+      'Фенрик изучал темные искусства, но применяет их наемно. Его заклинания пугают даже самых храбрых.',
+    species: Species.HUMAN,
+    class: Classes.WIZARD,
+    level: 4,
+    alignment: Alignments.NEUTRAL_EVIL,
+    salary: 8,
+    price: 32
+  }
 ];

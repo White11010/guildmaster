@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { RouterView } from './providers';
 import './style.css';
-import { AppLayout } from "@/shared/ui/AppLayout";
-import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
-import { AppModal } from "@/shared/ui/AppModal";
+import { AppModalRoot } from '@/app/ui/AppModalRoot';
+import { AppLayout } from '@/shared/ui/AppLayout';
+import { AppModals, useAppModalStore } from '@/shared/model/AppModal';
 import { useRoute } from 'vue-router';
 import { ROUTE_NAME } from '@/shared/config';
 import { computed } from 'vue';
@@ -59,5 +59,5 @@ function onEndDayButtonClick() {
     <router-view />
   </app-layout>
 
-  <app-modal />
+  <app-modal-root />
 </template>

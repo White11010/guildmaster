@@ -1,32 +1,32 @@
-import { defineStore } from "pinia";
-import type { BoardContract } from "@/entities/ContractsBoard";
+import { defineStore } from 'pinia';
+import type { BoardContract } from '@/entities/ContractsBoard';
 
 interface State {
-    contracts: Array<BoardContract>;
+  contracts: BoardContract[];
 }
 
 export const useContractsBoardStore = defineStore('contractsBoard', {
-    state: (): State => {
-        return {
-            contracts: []
-        };
+  state: (): State => {
+    return {
+      contracts: []
+    };
+  },
+  getters: {
+    contractsIds: (state) => state.contracts.map((contract) => contract.id)
+  },
+  actions: {
+    initContracts(contracts: BoardContract[]) {
+      this.contracts = contracts;
     },
-    getters: {
-        contractsIds: (state) => state.contracts.map(contract => contract.id)
+    addNewContract(contract: BoardContract) {
+      this.contracts.unshift(contract);
     },
-    actions: {
-        initContracts (contracts: Array<BoardContract>) {
-          this.contracts = contracts;
-        },
-        addNewContract (contract: BoardContract) {
-            this.contracts.unshift(contract);
-        },
-        addNewMultipleContracts (contracts: Array<BoardContract>) {
-            this.contracts.unshift(...contracts);
-        },
-        removeContractById (contractId: string) {
-            const contractToRemove = this.contracts.findIndex((contract) => contract.id === contractId);
-            this.contracts.splice(contractToRemove, 1);
-        }
+    addNewMultipleContracts(contracts: BoardContract[]) {
+      this.contracts.unshift(...contracts);
+    },
+    removeContractById(contractId: string) {
+      const contractToRemove = this.contracts.findIndex((contract) => contract.id === contractId);
+      this.contracts.splice(contractToRemove, 1);
     }
+  }
 });

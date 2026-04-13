@@ -26,22 +26,25 @@ const emit = defineEmits<{
     :gold="props.gold"
     @click:menu="emit('click:menu')"
   />
-  <div class="app__main" :class="{
-    'app__main--with-navigation': props.withNavigation,
-    'app__main--with-header': props.withHeader,
-    'app__main--with-footer': props.withFooter,
-  }">
-    <app-navigation v-if="props.withNavigation" class="app__navigation"/>
-    <div class="app__container" :class="{
-    'app__container--with-navigation': props.withNavigation
-  }">
+  <div
+    class="app__main"
+    :class="{
+      'app__main--with-navigation': props.withNavigation,
+      'app__main--with-header': props.withHeader,
+      'app__main--with-footer': props.withFooter
+    }"
+  >
+    <app-navigation v-if="props.withNavigation" class="app__navigation" />
+    <div
+      class="app__container"
+      :class="{
+        'app__container--with-navigation': props.withNavigation
+      }"
+    >
       <slot />
     </div>
   </div>
-  <footer
-    v-if="props.withFooter"
-    class="app__footer"
-  >
+  <footer v-if="props.withFooter" class="app__footer">
     <div
       class="app__footer-content"
       :class="{

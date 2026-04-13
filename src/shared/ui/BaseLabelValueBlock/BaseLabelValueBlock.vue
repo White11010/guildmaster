@@ -7,9 +7,7 @@ const props = defineProps<{
 
 <template>
   <div class="base-label-value-block">
-    <p class="base-label-value-block__label">
-      {{ props.label }}:
-    </p>
+    <p class="base-label-value-block__label">{{ props.label }}:</p>
     <p class="base-label-value-block__value">
       {{ props.value }}
     </p>
@@ -20,7 +18,7 @@ const props = defineProps<{
 .base-label-value-block {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
   &__label {
     text-decoration: underline;
   }

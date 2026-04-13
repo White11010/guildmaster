@@ -1,21 +1,24 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useHiringMarketStore } from "@/entities/HiringMarket";
-import type { Mercenary } from "@/entities/Mercenary";
-import { SpeciesTitles, ClassesTitles } from '@/entities/Mercenary';
-import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
-import { useGuildStore } from "@/entities/Guild";
-import { BaseLabelValueBlock } from "@/shared/ui/BaseLabelValueBlock";
+import { ref } from 'vue';
+import { useHiringMarketStore } from '@/entities/HiringMarket';
+import type { Mercenary } from '@/entities/Mercenary';
+import { ClassesTitles, SpeciesTitles } from '@/entities/Mercenary';
+import { BaseContentBlock } from '@/shared/ui/BaseContentBlock';
+import { useGuildStore } from '@/entities/Guild';
+import { BaseLabelValueBlock } from '@/shared/ui/BaseLabelValueBlock';
 
 const hiringMarketStore = useHiringMarketStore();
 const guildStore = useGuildStore();
 
-const activeMercenary = ref<Mercenary>(hiringMarketStore.mercenaries[0]);
-function onMercenaryClick (mercenary: Mercenary): void {
+const activeMercenary = ref<Mercenary | null>(hiringMarketStore.mercenaries[0] ?? null);
+function onMercenaryClick(mercenary: Mercenary): void {
   activeMercenary.value = mercenary;
 }
 
-function onHireButtonClick () {
+function onHireButtonClick(): void {
+  if (!activeMercenary.value) {
+    return;
+  }
   guildStore.hireMercenary(activeMercenary.value);
   activeMercenary.value = hiringMarketStore.mercenaries[0] ?? null;
 }
@@ -23,17 +26,15 @@ function onHireButtonClick () {
 
 <template>
   <base-content-block :title="'Рынок наемников'">
-    <div
-      v-if="hiringMarketStore.mercenaries.length"
-      class="hiring-market__mercenaries"
-    >
+    <div v-if="hiringMarketStore.mercenaries.length" class="hiring-market__mercenaries">
       <div class="hiring-market__mercenaries-list">
         <div
           v-for="mercenary in hiringMarketStore.mercenaries"
           :key="mercenary.id"
           class="hiring-market__mercenary"
           :class="{
-            'hiring-market__mercenary--active': activeMercenary && mercenary.id === activeMercenary.id
+            'hiring-market__mercenary--active':
+              activeMercenary && mercenary.id === activeMercenary.id
           }"
           @click="onMercenaryClick(mercenary)"
         >
@@ -53,20 +54,11 @@ function onHireButtonClick () {
                 {{ SpeciesTitles[mercenary.species] }}
               </p>
             </div>
-            <base-label-value-block
-              :value="mercenary.level"
-              label="Уровень"
-            />
+            <base-label-value-block :value="mercenary.level" label="Уровень" />
           </div>
           <div class="hiring-market__mercenary-short-info">
-            <base-label-value-block
-              :value="mercenary.price"
-              label="Стоимость"
-            />
-            <base-label-value-block
-              :value="mercenary.salary"
-              label="Плата в неделю"
-            />
+            <base-label-value-block :value="mercenary.price" label="Стоимость" />
+            <base-label-value-block :value="mercenary.salary" label="Плата в неделю" />
           </div>
         </div>
       </div>
@@ -86,15 +78,10 @@ function onHireButtonClick () {
             </button>
           </div>
         </template>
-        <div v-else>
-          Выберите наемника в списке
-        </div>
+        <div v-else>Выберите наемника в списке</div>
       </div>
     </div>
-    <div
-      v-else
-      class="hiring-market__empty"
-    >
+    <div v-else class="hiring-market__empty">
       <p>Сейчас нет доступных контрактов</p>
     </div>
   </base-content-block>
@@ -120,7 +107,7 @@ function onHireButtonClick () {
   &__mercenary-info {
     max-height: 100%;
     overflow: auto;
-    border-left: 2px solid black;
+    border-left: 2px solid var(--color-black);
     height: 100%;
     padding: 0 1rem;
     display: flex;
@@ -141,12 +128,12 @@ function onHireButtonClick () {
   &__mercenary {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
-    border: 1px solid black;
-    padding: .5rem;
+    gap: 0.5rem;
+    border: 1px solid var(--color-black);
+    padding: 0.5rem;
     cursor: pointer;
     &--active {
-      outline: 4px solid black;
+      outline: 4px solid var(--color-black);
     }
   }
 

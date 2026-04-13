@@ -1,1 +1,1 @@
-export { default as BaseContentBlock } from "./BaseContentBlock.vue";
+export { default as BaseContentBlock } from './BaseContentBlock.vue';

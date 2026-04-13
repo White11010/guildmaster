@@ -1,5 +1,7 @@
 body {
     margin: 0;
+    color: var(--color-black);
+    background-color: var(--color-white);
 }
 button {
     cursor: pointer;
@@ -14,6 +16,11 @@ h1, h2, h3, h4, h5, h6, p {
 
 html {
     font-family: sans-serif;
+}
+
+:root {
+    --color-black: #000;
+    --color-white: #fff;
 }
 
 button {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GuildContractsBlock } from "@/widgets/GuildContractsBlock";
+import { GuildContractsBlock } from '@/widgets/GuildContractsBlock';
 </script>
 
 <template>

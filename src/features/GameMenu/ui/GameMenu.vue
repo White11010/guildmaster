@@ -1,48 +1,49 @@
 <script setup lang="ts">
-import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
-import { useGameStore } from "@/entities/Game";
-import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
-import { router } from "@/app/providers";
+import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
+import { useGameStore } from '@/entities/Game';
+import { AppModals, useAppModalStore } from '@/shared/model/AppModal';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
 
 const gameStore = useGameStore();
 const appModalStore = useAppModalStore();
+const router = useRouter();
 
 interface GameMenuItem {
   title: string;
-  handler: () => void;
+  handler: () => void | Promise<void>;
 }
-const gameMenuItems: Array<GameMenuItem> = [
+const gameMenuItems: GameMenuItem[] = [
   {
     title: 'Продолжить',
-    handler () {
+    handler() {
       emit('update:modelValue', false);
     }
   },
   {
     title: 'Настройки',
-    handler () {
+    handler() {
       appModalStore.setCurrentModal(AppModals.CHANGE_SETTINGS);
     }
   },
   {
     title: 'Сохранить игру',
-    handler () {
+    handler() {
       gameStore.saveGame();
       appModalStore.setCurrentModal(AppModals.SUCCESS_SAVE);
     }
   },
   {
     title: 'Загрузить игру',
-    handler () {
+    handler() {
       appModalStore.setCurrentModal(AppModals.LOAD_GAME);
     }
   },
   {
     title: 'Сохранить и выйти',
-    async handler () {
+    async handler() {
       gameStore.saveGame();
       await router.push('/');
       emit('update:modelValue', false);

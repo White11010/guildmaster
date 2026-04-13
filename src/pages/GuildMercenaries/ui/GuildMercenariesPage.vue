@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GuildMercenariesBlock } from "@/widgets/GuildMercenariesBlock";
+import { GuildMercenariesBlock } from '@/widgets/GuildMercenariesBlock';
 </script>
 
 <template>

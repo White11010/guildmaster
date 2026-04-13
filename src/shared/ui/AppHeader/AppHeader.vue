@@ -7,9 +7,7 @@ const props = defineProps<{
   logoText?: string;
 }>();
 
-const emit = defineEmits<{
-  (e: 'click:menu'): void;
-}>();
+const emit = defineEmits<(e: 'click:menu') => void>();
 </script>
 
 <template>
@@ -17,7 +15,7 @@ const emit = defineEmits<{
     <div
       class="app-header__main-row"
       :class="{
-        'app-header__main-row--with-navigation': props.withNavigation,
+        'app-header__main-row--with-navigation': props.withNavigation
       }"
     >
       <h1 class="app-header__logo">
@@ -28,11 +26,7 @@ const emit = defineEmits<{
         <p>Золото: {{ props.gold }}</p>
       </div>
     </div>
-    <button
-      v-if="props.showMenuButton"
-      class="app-header__menu-button"
-      @click="emit('click:menu')"
-    >
+    <button v-if="props.showMenuButton" class="app-header__menu-button" @click="emit('click:menu')">
       Меню
     </button>
   </header>

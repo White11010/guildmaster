@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { useGameStore } from "@/entities/Game";
-import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
-import { computed } from "vue";
+import { useRouter } from 'vue-router';
+import { useGameStore } from '@/entities/Game';
+import { AppModals, useAppModalStore } from '@/shared/model/AppModal';
+import { computed } from 'vue';
 
 const router = useRouter();
 
@@ -14,7 +14,7 @@ interface StartMenuItem {
   handler: () => void;
   disabled?: boolean;
 }
-const menuItems = computed<Array<StartMenuItem>>(() => {
+const menuItems = computed<StartMenuItem[]>(() => {
   return [
     {
       title: 'Продолжить',
@@ -66,7 +66,7 @@ gameStore.loadSavedGames();
 
 <style lang="scss" scoped>
 .start-menu {
-  border: 1px solid black;
+  border: 1px solid var(--color-black);
   padding: 2rem;
   display: flex;
   flex-direction: column;

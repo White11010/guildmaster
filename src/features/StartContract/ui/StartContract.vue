@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
-import { CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START } from "@/entities/Guild/config/GuildContract.config.ts";
-import { type GuildContract, type GuildMercenary, GuildMercenaryAssignmentCard, useGuildStore } from "@/entities/Guild";
-import { getContractSuccessChance } from "@/entities/Guild/lib/getContractSuccessChance.ts";
-import { getGuildMercenaryContractPower } from "@/entities/Guild/lib/getGuildMercenaryContractPower.ts";
-import { computed, ref } from "vue";
+import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
+import { CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START } from '@/entities/Guild/config/GuildContract.config.ts';
+import {
+  type GuildContract,
+  type GuildMercenary,
+  GuildMercenaryAssignmentCard,
+  useGuildStore
+} from '@/entities/Guild';
+import { getContractSuccessChance } from '@/entities/Guild/lib/getContractSuccessChance.ts';
+import { getGuildMercenaryContractPower } from '@/entities/Guild/lib/getGuildMercenaryContractPower.ts';
+import { computed, ref } from 'vue';
 
 interface Props extends BaseModalProps {
   contract: GuildContract | null;
@@ -14,7 +19,7 @@ const emit = defineEmits<BaseModalEmits>();
 
 const guildStore = useGuildStore();
 
-const selectedMercenaries = ref<Array<GuildMercenary>>([]);
+const selectedMercenaries = ref<GuildMercenary[]>([]);
 const assignmentMercenariesPower = computed(() => {
   return selectedMercenaries.value.reduce((totalPower, mercenary) => {
     return totalPower + getGuildMercenaryContractPower(mercenary);
@@ -22,24 +27,19 @@ const assignmentMercenariesPower = computed(() => {
 });
 
 const minSquadPowerForContract = computed(() =>
-  props.contract
-    ? Math.ceil(props.contract.power * CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START)
-    : 0
+  props.contract ? Math.ceil(props.contract.power * CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START) : 0
 );
 
-const canStartContract = computed(() =>
-  props.contract !== null &&
-  assignmentMercenariesPower.value >= minSquadPowerForContract.value
+const canStartContract = computed(
+  () =>
+    props.contract !== null && assignmentMercenariesPower.value >= minSquadPowerForContract.value
 );
 
 const contractSuccessChancePercent = computed(() => {
   if (!props.contract || !canStartContract.value) {
     return null;
   }
-  const p = getContractSuccessChance(
-    assignmentMercenariesPower.value,
-    props.contract.power,
-  );
+  const p = getContractSuccessChance(assignmentMercenariesPower.value, props.contract.power);
   return Math.round(p * 1000) / 10;
 });
 
@@ -47,11 +47,12 @@ function onSelectMercenaryButtonClick(mercenary: GuildMercenary): void {
   selectedMercenaries.value.push(mercenary);
 }
 function onCancelMercenaryButtonClick(mercenary: GuildMercenary): void {
-  selectedMercenaries.value
-    .splice(
-      selectedMercenaries.value.findIndex(selectedMercenary => selectedMercenary.id === mercenary.id),
-      1
-    );
+  selectedMercenaries.value.splice(
+    selectedMercenaries.value.findIndex(
+      (selectedMercenary) => selectedMercenary.id === mercenary.id
+    ),
+    1
+  );
 }
 
 function onUpdateModelValue(isOpen: boolean) {
@@ -72,8 +73,14 @@ function onStartContractButtonClick() {
 </script>
 
 <template>
-  <base-modal title="Контракт" :model-value="props.modelValue" with-close-button width="min(80vw, 1200px)"
-    height="min(80vh, 1000px)" @update:model-value="onUpdateModelValue">
+  <base-modal
+    title="Контракт"
+    :model-value="props.modelValue"
+    with-close-button
+    width="min(80vw, 1200px)"
+    height="min(80vh, 1000px)"
+    @update:model-value="onUpdateModelValue"
+  >
     <div v-if="props.contract" class="start-contract">
       <div class="start-contract__container">
         <h3>{{ props.contract.title }}</h3>
@@ -103,11 +110,16 @@ function onStartContractButtonClick() {
             Шанс успешного прохождения: {{ contractSuccessChancePercent }}%
           </p>
           <p v-if="!canStartContract" class="start-contract__power-hint">
-            Минимум для старта: {{ minSquadPowerForContract }}
-            ({{ Math.round(CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START * 100) }}% силы контракта)
+            Минимум для старта: {{ minSquadPowerForContract }} ({{
+              Math.round(CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START * 100)
+            }}% силы контракта)
           </p>
           <ul class="start-contract__selected-mercenaries-list">
-            <li v-for="mercenary in selectedMercenaries" :key="mercenary.id" class="start-contract__selected-mercenary">
+            <li
+              v-for="mercenary in selectedMercenaries"
+              :key="mercenary.id"
+              class="start-contract__selected-mercenary"
+            >
               <p>{{ mercenary.name }}</p>
               <p>{{ mercenary.class }}</p>
               <div class="start-contract__assignment-block">
@@ -117,17 +129,28 @@ function onStartContractButtonClick() {
             </li>
           </ul>
           <div class="start-contract__available-mernaries-list">
-            <guild-mercenary-assignment-card v-for="mercenary in guildStore.freeMercenaries" :key="mercenary.id"
+            <guild-mercenary-assignment-card
+              v-for="mercenary in guildStore.freeMercenaries"
+              :key="mercenary.id"
               :mercenary="mercenary"
-              :is-selected="selectedMercenaries.some(selectedMercenary => selectedMercenary.id === mercenary.id)"
-              @click:select="onSelectMercenaryButtonClick" @click:cancel="onCancelMercenaryButtonClick" />
+              :is-selected="
+                selectedMercenaries.some(
+                  (selectedMercenary) => selectedMercenary.id === mercenary.id
+                )
+              "
+              @click:select="onSelectMercenaryButtonClick"
+              @click:cancel="onCancelMercenaryButtonClick"
+            />
           </div>
         </div>
-
       </div>
       <div class="start-contract__footer">
-        <button class="start-contract__start-button" type="button" :disabled="!canStartContract"
-          @click="onStartContractButtonClick">
+        <button
+          class="start-contract__start-button"
+          type="button"
+          :disabled="!canStartContract"
+          @click="onStartContractButtonClick"
+        >
           Начать
         </button>
       </div>
@@ -140,7 +163,7 @@ function onStartContractButtonClick() {
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
 
   &__container {
     height: calc(100% - 3.75rem);
@@ -159,14 +182,14 @@ function onStartContractButtonClick() {
   &__info-block {
     display: flex;
     align-items: center;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   &__selected-mercenaries-list {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   &__selected-mercenary {
@@ -215,11 +238,11 @@ function onStartContractButtonClick() {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
   }
   &__assignment-block {
     display: flex;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 }
 </style>

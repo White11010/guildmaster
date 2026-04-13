@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GuildBlock, useGuildStore } from "@/entities/Guild";
+import { GuildBlock } from '@/entities/Guild';
 </script>
 
 <template>

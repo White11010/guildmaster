@@ -1,6 +1,5 @@
 <script setup lang="ts">
-
-import { BaseContentBlock } from "@/shared/ui/BaseContentBlock";
+import { BaseContentBlock } from '@/shared/ui/BaseContentBlock';
 </script>
 
 <template>

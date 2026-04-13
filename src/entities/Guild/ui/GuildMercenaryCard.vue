@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { GuildMercenary } from "@/entities/Guild";
-import { GuildContractStates, useGuildStore } from "@/entities/Guild";
-import { ClassesTitles, SpeciesTitles } from "@/entities/Mercenary";
-import { BaseLabelValueBlock } from "@/shared/ui/BaseLabelValueBlock";
-import { computed } from "vue";
+import type { GuildMercenary } from '@/entities/Guild';
+import { GuildContractStates, useGuildStore } from '@/entities/Guild';
+import { ClassesTitles, SpeciesTitles } from '@/entities/Mercenary';
+import { BaseLabelValueBlock } from '@/shared/ui/BaseLabelValueBlock';
+import { computed } from 'vue';
 
 const props = defineProps<{
   mercenary: GuildMercenary;
@@ -12,17 +12,17 @@ const props = defineProps<{
 const guildStore = useGuildStore();
 
 const isOnMission = computed(() =>
-    guildStore.currentContracts.some(
-        (c) =>
-            c.state === GuildContractStates.IN_PROGRESS &&
-            c.mercenaries.some((m) => m.id === props.mercenary.id),
-    ),
+  guildStore.currentContracts.some(
+    (c) =>
+      c.state === GuildContractStates.IN_PROGRESS &&
+      c.mercenaries.some((m) => m.id === props.mercenary.id)
+  )
 );
 
 /** Дней до следующей выплаты зарплаты (каждые 7 дней в гильдии). */
 const daysUntilSalary = computed(() => {
-    const d = props.mercenary.daysInGuild % 7;
-    return d === 0 ? 7 : 7 - d;
+  const d = props.mercenary.daysInGuild % 7;
+  return d === 0 ? 7 : 7 - d;
 });
 
 function onPayDebtClick() {
@@ -31,55 +31,31 @@ function onPayDebtClick() {
 </script>
 
 <template>
-  <div
-    class="mercenary-guild-card"
-    :class="{ 'mercenary-guild-card--on-mission': isOnMission }"
-  >
+  <div class="mercenary-guild-card" :class="{ 'mercenary-guild-card--on-mission': isOnMission }">
     <div class="mercenary-guild-card__inner">
       <p class="mercenary-guild-card__name">
         {{ props.mercenary.name }}
       </p>
       <div class="mercenary-guild-card__main-info">
-      <p>
-        {{ ClassesTitles[props.mercenary.class] }}
-      </p>
-      <p>
-        {{ SpeciesTitles[props.mercenary.species] }}
-      </p>
-      <p>{{ props.mercenary.level }} уровень</p>
-    </div>
-    <div class="mercenary-guild-card__salary-info">
-      <base-label-value-block
-        :value="isOnMission ? 'На задании' : 'Свободен'"
-        label="Статус"
-      />
-      <base-label-value-block
-        :value="props.mercenary.salary"
-        :label="'Зарплата в неделю'"
-      />
-      <base-label-value-block
-        :value="daysUntilSalary"
-        :label="'Дней до выплаты зарплаты'"
-      />
-    </div>
-    <div class="mercenary-guild-card__extra-info">
-      <base-label-value-block
-        :value="props.mercenary.daysInGuild"
-        :label="'Дней в гильдии'"
-      />
-      <base-label-value-block
-        :value="props.mercenary.debt"
-        :label="'Долг'"
-      />
-      <base-label-value-block
-        :value="props.mercenary.debtDays"
-        :label="'Дней с долгом'"
-      />
-      <base-label-value-block
-        :value="props.mercenary.moral"
-        :label="'Мораль'"
-      />
-    </div>
+        <p>
+          {{ ClassesTitles[props.mercenary.class] }}
+        </p>
+        <p>
+          {{ SpeciesTitles[props.mercenary.species] }}
+        </p>
+        <p>{{ props.mercenary.level }} уровень</p>
+      </div>
+      <div class="mercenary-guild-card__salary-info">
+        <base-label-value-block :value="isOnMission ? 'На задании' : 'Свободен'" label="Статус" />
+        <base-label-value-block :value="props.mercenary.salary" :label="'Зарплата в неделю'" />
+        <base-label-value-block :value="daysUntilSalary" :label="'Дней до выплаты зарплаты'" />
+      </div>
+      <div class="mercenary-guild-card__extra-info">
+        <base-label-value-block :value="props.mercenary.daysInGuild" :label="'Дней в гильдии'" />
+        <base-label-value-block :value="props.mercenary.debt" :label="'Долг'" />
+        <base-label-value-block :value="props.mercenary.debtDays" :label="'Дней с долгом'" />
+        <base-label-value-block :value="props.mercenary.moral" :label="'Мораль'" />
+      </div>
       <button
         v-if="props.mercenary.debt > 0"
         type="button"
@@ -90,11 +66,7 @@ function onPayDebtClick() {
         Погасить долг ({{ props.mercenary.debt }})
       </button>
     </div>
-    <div
-      v-if="isOnMission"
-      class="mercenary-guild-card__mission-overlay"
-      aria-hidden="true"
-    >
+    <div v-if="isOnMission" class="mercenary-guild-card__mission-overlay" aria-hidden="true">
       На задании
     </div>
   </div>
@@ -103,16 +75,16 @@ function onPayDebtClick() {
 <style scoped lang="scss">
 .mercenary-guild-card {
   position: relative;
-  border: 1px solid black;
-  padding: .5rem;
+  border: 1px solid var(--color-black);
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
 
   &__inner {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   &--on-mission &__inner {
@@ -132,8 +104,8 @@ function onPayDebtClick() {
     font-weight: 700;
     letter-spacing: 0.03em;
     text-transform: uppercase;
-    color: #1a1a1a;
-    background: rgba(255, 255, 255, 0.55);
+    color: color-mix(in srgb, var(--color-black) 90%, var(--color-white));
+    background: color-mix(in srgb, var(--color-white) 55%, transparent);
     backdrop-filter: blur(1px);
     pointer-events: none;
   }
@@ -144,27 +116,27 @@ function onPayDebtClick() {
   }
   &__main-info {
     display: grid;
-    gap: .5rem;
+    gap: 0.5rem;
     grid-template-columns: 1fr 1fr 1fr;
   }
 
   &__salary-info {
     display: grid;
-    gap: .5rem;
+    gap: 0.5rem;
     grid-template-columns: 1fr 1fr;
   }
 
   &__extra-info {
     display: grid;
-    gap: .5rem;
+    gap: 0.5rem;
     grid-template-columns: 1fr 1fr;
   }
 
   &__pay-debt {
-    padding: .35rem .5rem;
+    padding: 0.35rem 0.5rem;
     cursor: pointer;
-    border: 1px solid #333;
-    background: #f5f5f5;
+    border: 1px solid color-mix(in srgb, var(--color-black) 70%, var(--color-white));
+    background: color-mix(in srgb, var(--color-white) 96%, var(--color-black));
     font: inherit;
 
     &:disabled {

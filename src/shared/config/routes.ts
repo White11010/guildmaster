@@ -9,7 +9,7 @@ export const ROUTE_PATH = {
   GUILD_MERCENARIES: '/guild/mercenaries',
   HIRING_MARKET: '/hiring-market',
   CONTRACTS_BOARD: '/contracts-board',
-  LOG: '/log',
+  LOG: '/log'
 } as const;
 
 export type RoutePath = (typeof ROUTE_PATH)[keyof typeof ROUTE_PATH];
@@ -22,7 +22,7 @@ export const ROUTE_NAME = {
   GUILD_MERCENARIES: 'guild-mercenaries',
   HIRING_MARKET: 'hiring-market',
   CONTRACTS_BOARD: 'contracts-board',
-  LOG: 'log',
+  LOG: 'log'
 } as const;
 
 export type RouteName = (typeof ROUTE_NAME)[keyof typeof ROUTE_NAME];

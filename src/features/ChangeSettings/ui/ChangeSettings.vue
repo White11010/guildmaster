@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { BaseModal, type BaseModalEmits, type BaseModalProps } from "@/shared/ui/BaseModal";
-import { type SettingsItem, SettingsItemTypes } from "../model/ChangeSettings.types.ts";
+import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
+import { type SettingsItem, SettingsItemTypes } from '../model/ChangeSettings.types.ts';
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
 
-const settings: Array<SettingsItem> = [
+const settings: SettingsItem[] = [
   {
     title: 'Тут будут настройки',
     type: SettingsItemTypes.CHECKBOX,
-    handler () {
-
+    handler() {
+      console.log('settings');
     }
   },
   {
     title: 'Тут будут настройки',
     type: SettingsItemTypes.CHECKBOX,
-    handler () {
-
+    handler() {
+      console.log('settings');
     }
   },
   {
     title: 'Тут будут настройки',
     type: SettingsItemTypes.CHECKBOX,
-    handler () {
-
+    handler() {
+      console.log('settings');
     }
   }
 ];
@@ -38,18 +38,11 @@ const settings: Array<SettingsItem> = [
     @update:model-value="emit('update:modelValue', $event)"
   >
     <div class="settings-modal">
-      <div
-        v-for="setting in settings"
-        :key="setting.title"
-        class="settings-modal__item"
-      >
+      <div v-for="setting in settings" :key="setting.title" class="settings-modal__item">
         <p class="settings-modal__item-title">
           {{ setting.title }}
         </p>
-        <input
-          class="settings-modal__checkbox"
-          type="checkbox"
-        >
+        <input class="settings-modal__checkbox" type="checkbox" />
       </div>
     </div>
   </base-modal>

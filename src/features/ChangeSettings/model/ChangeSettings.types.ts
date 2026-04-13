@@ -1,8 +1,8 @@
 export interface SettingsItem {
-    title: string;
-    type: SettingsItemTypes;
-    handler: () => void;
+  title: string;
+  type: SettingsItemTypes;
+  handler: () => void;
 }
 export enum SettingsItemTypes {
-    CHECKBOX = "CHECKBOX",
+  CHECKBOX = 'CHECKBOX'
 }
