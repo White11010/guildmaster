@@ -3,7 +3,6 @@
  */
 export const ROUTE_PATH = {
   MENU: '/',
-  GAME: '/game',
   GUILD: '/guild',
   GUILD_CONTRACTS: '/guild/contracts',
   GUILD_MERCENARIES: '/guild/mercenaries',
@@ -16,7 +15,6 @@ export type RoutePath = (typeof ROUTE_PATH)[keyof typeof ROUTE_PATH];
 
 export const ROUTE_NAME = {
   MENU: 'menu',
-  GAME: 'game',
   GUILD: 'guild',
   GUILD_CONTRACTS: 'guild-contracts',
   GUILD_MERCENARIES: 'guild-mercenaries',

@@ -8,11 +8,6 @@ export const routes = [
     component: () => import('@/pages/Menu/ui/MenuPage.vue')
   },
   {
-    path: ROUTE_PATH.GAME,
-    name: ROUTE_NAME.GAME,
-    component: () => import('@/pages/Game/ui/GamePage.vue')
-  },
-  {
     path: ROUTE_PATH.GUILD,
     name: ROUTE_NAME.GUILD,
     component: () => import('@/pages/Guild/ui/GuildPage.vue')
