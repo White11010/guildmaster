@@ -18,7 +18,7 @@ const guildStore = useGuildStore();
 const isMenuRoute = computed(() => route.name === ROUTE_NAME.MENU);
 const withNavigation = computed(() => !isMenuRoute.value);
 const withHeader = computed(() => !isMenuRoute.value);
-const withFooter = computed(() => true);
+const withFooter = computed(() => !isMenuRoute.value);
 const showMenuButton = computed(() => !isMenuRoute.value);
 const showEndDayButton = computed(() => true);
 const day = computed(() => gameStore.currentGame.day);
