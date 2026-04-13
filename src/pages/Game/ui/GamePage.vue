@@ -1,26 +1,15 @@
 <script setup lang="ts">
 import { HiringMarketBlock } from '@/widgets/HiringMarketBlock';
-import { GuildBlock, useGuildStore } from "@/entities/Guild";
+import { GuildBlock } from "@/entities/Guild";
 import { GuildContractsBlock } from "@/widgets/GuildContractsBlock";
 import { GuildMercenariesBlock } from "@/widgets/GuildMercenariesBlock";
 import { ContractsBlock } from "@/widgets/ContractsBlock";
 import { useGameStore } from "@/entities/Game";
-import { AppModals, useAppModalStore } from "@/shared/model/AppModal";
 import { useRouter } from "vue-router";
 import { LogBlock } from "@/widgets/LogBlock";
 
 const gameStore = useGameStore();
-const guildStore = useGuildStore();
-const appModalStore = useAppModalStore();
 const router = useRouter();
-
-function shouldOfferDebtSettlement(): boolean {
-  const withDebt = guildStore.mercenaries.filter((m) => m.debt > 0);
-  if (!withDebt.length || guildStore.money <= 0) {
-    return false;
-  }
-  return withDebt.some((m) => m.debt <= guildStore.money);
-}
 
 function loadLastSavedGame () {
   if (!gameStore.isGameLoaded) {
@@ -34,13 +23,6 @@ function loadLastSavedGame () {
   }
 }
 loadLastSavedGame();
-
-function onFinishDayButtonClick () {
-  gameStore.finishDay();
-  if (shouldOfferDebtSettlement()) {
-    appModalStore.setCurrentModal(AppModals.PAY_DEBTS);
-  }
-}
 </script>
 
 <template>
@@ -54,18 +36,6 @@ function onFinishDayButtonClick () {
         <guild-mercenaries-block />
         <log-block />
       </div>
-      <footer class="game__footer">
-        <div class="game__footer-days-block">
-          <p>Дней прошло:</p>
-          <p>{{ gameStore.currentGame.day }}</p>
-        </div>
-        <button
-          class="game__end-day-button"
-          @click="onFinishDayButtonClick"
-        >
-          Завершить день
-        </button>
-      </footer>
     </template>
   </div>
 </template>
@@ -77,7 +47,7 @@ function onFinishDayButtonClick () {
 
   &__content {
     max-width: 1920px;
-    height: calc(100% - 4rem);
+    height: 100%;
     display: grid;
     gap: 2rem;
     grid-template-columns: 1fr 1fr;
@@ -86,23 +56,6 @@ function onFinishDayButtonClick () {
     padding: 2rem;
     border: 4px solid black;
     background-color: rgb(black, .1);
-  }
-  &__footer {
-    margin: 1rem auto 0 auto;
-    max-width: 1920px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  &__footer-days-block {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    height: 3rem;
-    font-size: 2rem;
-  }
-  &__end-day-button {
-    font-size: 2rem;
   }
 }
 </style>

@@ -8,27 +8,27 @@ export const appNavigationItems: Array<AppNavigationItem> = [
         id: AppNavigationItems.GUILD,
     },
     {
-        title: 'Контракты гильдии',
+        title: 'Контракты',
         path: ROUTE_PATH.GUILD_CONTRACTS,
         id: AppNavigationItems.GUILD_CONTRACTS,
     },
     {
-        title: 'Наемники гильдии',
+        title: 'Отряд',
         path: ROUTE_PATH.GUILD_MERCENARIES,
         id: AppNavigationItems.GUILD_MERCENARIES,
     },
     {
-        title: 'Рынок наемников',
+        title: 'Таверна',
         path: ROUTE_PATH.HIRING_MARKET,
         id: AppNavigationItems.HIRING_MARKET,
     },
     {
-        title: 'Доска контрактов',
+        title: 'Доска заказов',
         path: ROUTE_PATH.CONTRACTS_BOARD,
         id: AppNavigationItems.CONTRACTS_BOARD,
     },
     {
-        title: 'Журнал событий',
+        title: 'Журнал',
         path: ROUTE_PATH.LOG,
         id: AppNavigationItems.LOG,
     },
