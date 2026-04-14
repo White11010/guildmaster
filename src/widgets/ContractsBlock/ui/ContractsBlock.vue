@@ -112,6 +112,8 @@ function onAcceptButtonClick(): void {
     border: 1px solid var(--color-black);
     padding: 0.5rem;
     &--active {
+      // background: var(--color-black);
+      // color: var(--color-white);
       outline: 4px solid var(--color-black);
     }
   }

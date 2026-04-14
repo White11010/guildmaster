@@ -15,12 +15,20 @@ const appModalStore = useAppModalStore();
 const gameStore = useGameStore();
 const guildStore = useGuildStore();
 
-const isMenuRoute = computed(() => route.name === ROUTE_NAME.MENU);
-const withNavigation = computed(() => !isMenuRoute.value);
-const withHeader = computed(() => !isMenuRoute.value);
-const withFooter = computed(() => !isMenuRoute.value);
-const showMenuButton = computed(() => !isMenuRoute.value);
-const showEndDayButton = computed(() => true);
+const ROUTES_WITH_HEADER_AND_NAVIGATION = [
+  ROUTE_NAME.GUILD,
+  ROUTE_NAME.GUILD_CONTRACTS,
+  ROUTE_NAME.GUILD_MERCENARIES,
+  ROUTE_NAME.HIRING_MARKET,
+  ROUTE_NAME.LOG,
+  ROUTE_NAME.CONTRACTS_BOARD
+];
+
+const withNavigation = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
+const withHeader = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
+const withFooter = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
+const showMenuButton = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
+const showEndDayButton = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
 const day = computed(() => gameStore.currentGame.day);
 const gold = computed(() => guildStore.money);
 
