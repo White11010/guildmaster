@@ -5,7 +5,7 @@ import { AppModalRoot } from '@/app/ui/AppModalRoot';
 import { AppLayout } from '@/shared/ui/AppLayout';
 import { AppModals, useAppModalStore } from '@/shared/model/AppModal';
 import { useRoute } from 'vue-router';
-import { ROUTE_NAME } from '@/shared/config';
+import { ROUTE_NAME, type RouteName } from '@/shared/config';
 import { computed } from 'vue';
 import { useGameStore } from '@/entities/Game';
 import { useGuildStore } from '@/entities/Guild';
@@ -24,11 +24,25 @@ const ROUTES_WITH_HEADER_AND_NAVIGATION = [
   ROUTE_NAME.CONTRACTS_BOARD
 ];
 
-const withNavigation = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
-const withHeader = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
-const withFooter = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
-const showMenuButton = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
-const showEndDayButton = computed(() => ROUTES_WITH_HEADER_AND_NAVIGATION.includes(route.name));
+type NavigationRouteName = (typeof ROUTES_WITH_HEADER_AND_NAVIGATION)[number];
+
+function isRouteName(value: unknown): value is RouteName {
+  return typeof value === 'string' && Object.values(ROUTE_NAME).includes(value as RouteName);
+}
+
+function isNavigationRouteName(value: unknown): value is NavigationRouteName {
+  return (
+    isRouteName(value) && ROUTES_WITH_HEADER_AND_NAVIGATION.includes(value as NavigationRouteName)
+  );
+}
+
+const isNavigationRoute = computed(() => isNavigationRouteName(route.name));
+
+const withNavigation = computed(() => isNavigationRoute.value);
+const withHeader = computed(() => isNavigationRoute.value);
+const withFooter = computed(() => isNavigationRoute.value);
+const showMenuButton = computed(() => isNavigationRoute.value);
+const showEndDayButton = computed(() => isNavigationRoute.value);
 const day = computed(() => gameStore.currentGame.day);
 const gold = computed(() => guildStore.money);
 

@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { useGameStore } from '@/entities/Game';
 import { AppModals, useAppModalStore } from '@/shared/model/AppModal';
 import { computed } from 'vue';
+import { ROUTE_PATH } from '@/shared/config';
 
 const router = useRouter();
 
@@ -21,7 +22,7 @@ const menuItems = computed<StartMenuItem[]>(() => {
       handler: () => {
         if (gameStore.savedGamesIds.length) {
           gameStore.initLastSavedGame();
-          router.push('/game');
+          router.push(ROUTE_PATH.GUILD);
         }
       },
       disabled: gameStore.savedGamesIds.length === 0

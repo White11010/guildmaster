@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { GuildMercenariesBlock } from '@/widgets/GuildMercenariesBlock';
+import { useTryLoadLastGame } from '@/features/LoadGame';
+
+useTryLoadLastGame();
 </script>
 
 <template>

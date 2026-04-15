@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { HiringMarketBlock } from '@/widgets/HiringMarketBlock';
+import { useTryLoadLastGame } from '@/features/LoadGame';
+
+useTryLoadLastGame();
 </script>
 
 <template>

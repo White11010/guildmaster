@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { LogBlock } from '@/widgets/LogBlock';
+import { useTryLoadLastGame } from '@/features/LoadGame';
+
+useTryLoadLastGame();
 </script>
 
 <template>

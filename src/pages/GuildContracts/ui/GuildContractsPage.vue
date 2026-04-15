@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { GuildContractsBlock } from '@/widgets/GuildContractsBlock';
+import { useTryLoadLastGame } from '@/features/LoadGame';
+
+useTryLoadLastGame();
 </script>
 
 <template>

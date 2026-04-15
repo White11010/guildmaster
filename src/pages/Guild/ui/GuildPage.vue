@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { GuildBlock } from '@/entities/Guild';
+import { GuildInfoBlock } from '@/widgets/GuildInfoBlock';
+import { useTryLoadLastGame } from '@/features/LoadGame';
+
+useTryLoadLastGame();
 </script>
 
 <template>
   <div class="guild-page">
-    <guild-block />
+    <guild-info-block />
   </div>
 </template>
 

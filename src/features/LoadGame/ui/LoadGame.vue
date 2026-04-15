@@ -2,6 +2,7 @@
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 import { useGameStore } from '@/entities/Game';
 import { useRouter } from 'vue-router';
+import { ROUTE_PATH } from '@/shared/config';
 
 const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
@@ -12,7 +13,7 @@ gameStore.loadSavedGames();
 
 function onLoadGameClick(gameId: string) {
   gameStore.initSavedGame(gameId);
-  router.push('/game');
+  router.push(ROUTE_PATH.GUILD);
   emit('update:modelValue', false);
 }
 </script>

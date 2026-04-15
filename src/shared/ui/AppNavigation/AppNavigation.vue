@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { appNavigationItems } from '@/shared/model/AppNavigation/AppNavigation.constants';
-import { type AppNavigationItem, useAppNavigationStore } from '@/shared/model/AppNavigation';
-import { useRouter } from 'vue-router';
+import { type AppNavigationItem } from '@/shared/model/AppNavigation';
+import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
-const appNavigationStore = useAppNavigationStore();
+const route = useRoute();
 
 function onTabItemClick(tab: AppNavigationItem) {
-  appNavigationStore.setCurrentTab(tab.id);
   router.push(tab.path);
 }
 </script>
@@ -19,7 +18,7 @@ function onTabItemClick(tab: AppNavigationItem) {
         <button
           class="app-navigation__nav-item-button"
           :class="{
-            'app-navigation__nav-item-button--active': tab.id === appNavigationStore.currentTab
+            'app-navigation__nav-item-button--active': tab.path === route.path
           }"
           @click="onTabItemClick(tab)"
         >
