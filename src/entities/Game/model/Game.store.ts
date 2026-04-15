@@ -99,7 +99,7 @@ export const useGameStore = defineStore('game', {
       logStore.initLog([]);
       guildStore.initGuild({
         title: guildTitle,
-        money: 1000000,
+        money: 100,
         fame: 0,
         reputation: 0,
         mercenaries: [],

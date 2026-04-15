@@ -76,7 +76,7 @@ const emit = defineEmits<{
     gap: 2rem;
 
     &--with-navigation {
-      padding: 0 22rem 2rem 2rem;
+      padding: 0 2rem 2rem 2rem;
     }
 
     &--with-header {
