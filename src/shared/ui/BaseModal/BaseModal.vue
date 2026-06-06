@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import type { BaseModalEmits, BaseModalProps } from './BaseModal.types.ts';
 import { computed } from 'vue';
 
@@ -49,9 +50,14 @@ const getModalBodyStyles = computed((): Record<string, string> => {
         <h3 class="base-modal__heading">
           {{ props.title }}
         </h3>
-        <button v-if="props.withCloseButton" class="base-modal__close-button" @click="close">
+        <base-button
+          v-if="props.withCloseButton"
+          class="base-modal__close-button"
+          size="sm"
+          @click="close"
+        >
           Закрыть
-        </button>
+        </base-button>
       </header>
       <div class="base-modal__body" :style="getModalBodyStyles">
         <slot v-bind="{ close }" />
@@ -96,7 +102,6 @@ const getModalBodyStyles = computed((): Record<string, string> => {
 
   &__close-button {
     margin-left: auto;
-    font-size: 1.5rem;
   }
 
   &__body {

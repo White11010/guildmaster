@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import type { Mercenary } from '@/entities/Mercenary';
 import { useGuildStore } from '@/entities/Guild';
 
@@ -15,13 +16,14 @@ function onHireButtonClick() {
 
 <template>
   <div class="hire-mercenary">
-    <button
+    <base-button
       class="hire-mercenary__button"
+      size="lg"
       :disabled="guildStore.money < props.mercenary.price"
       @click="onHireButtonClick"
     >
       Нанять
-    </button>
+    </base-button>
   </div>
 </template>
 
@@ -32,7 +34,6 @@ function onHireButtonClick() {
 
   &__button {
     width: 8rem;
-    font-size: 1.5rem;
   }
 }
 </style>

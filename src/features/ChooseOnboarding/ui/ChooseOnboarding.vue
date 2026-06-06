@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 
 const props = defineProps<BaseModalProps>();
@@ -25,12 +26,16 @@ function onStartOnboardingButtonClick() {
         иногда незаметно, иногда необратимо. Посмотрим, как далеко вы сможете зайти.
       </p>
       <div class="choose-onboarding__footer">
-        <button class="choose-onboarding__button" @click="onSkipOnboardingButtonClick">
+        <base-button class="choose-onboarding__button" @click="onSkipOnboardingButtonClick">
           Пропустить обучение
-        </button>
-        <button class="choose-onboarding__button" @click="onStartOnboardingButtonClick">
+        </base-button>
+        <base-button
+          class="choose-onboarding__button"
+          variant="primary"
+          @click="onStartOnboardingButtonClick"
+        >
           Начать обучение
-        </button>
+        </base-button>
       </div>
     </div>
   </base-modal>
@@ -47,10 +52,6 @@ function onStartOnboardingButtonClick() {
     display: flex;
     justify-content: center;
     gap: 4rem;
-  }
-
-  &__button {
-    font-size: 1.2rem;
   }
 
   &__text {

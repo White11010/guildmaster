@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import { getContractEstimatedDurationDays } from '@/entities/Contract';
 import {
   type GuildContract,
@@ -70,14 +71,14 @@ const missionMercenaryNames = computed(() => props.contract.mercenaries.map((m) 
         </div>
       </template>
     </div>
-    <button
+    <base-button
       v-if="props.contract.state === GuildContractStates.PENDING"
       class="contract-guild-card__start-button"
-      type="button"
+      variant="primary"
       @click="emit('click:start')"
     >
       Начать
-    </button>
+    </base-button>
   </div>
 </template>
 
@@ -142,7 +143,6 @@ const missionMercenaryNames = computed(() => props.contract.mercenaries.map((m) 
   &__start-button {
     align-self: flex-start;
     margin-top: 0.25rem;
-    font-size: 1rem;
   }
 }
 </style>

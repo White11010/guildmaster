@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 import { useGameStore } from '@/entities/Game';
 import { AppModals, useAppModalStore } from '@/shared/model/AppModal';
@@ -59,14 +60,15 @@ const gameMenuItems: GameMenuItem[] = [
     @update:model-value="emit('update:modelValue', $event)"
   >
     <div class="game-menu">
-      <button
+      <base-button
         v-for="item in gameMenuItems"
         :key="item.title"
         class="game-menu__item"
+        size="lg"
         @click="item.handler"
       >
         {{ item.title }}
-      </button>
+      </base-button>
     </div>
   </base-modal>
 </template>
@@ -82,7 +84,6 @@ const gameMenuItems: GameMenuItem[] = [
 
   &__item {
     width: 100%;
-    font-size: 2rem;
   }
 }
 </style>

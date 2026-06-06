@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import type { GuildMercenary } from '@/entities/Guild';
 import { GuildContractStates, useGuildStore } from '@/entities/Guild';
 import { ClassesTitles, SpeciesTitles } from '@/entities/Mercenary';
@@ -56,15 +57,15 @@ function onPayDebtClick() {
         <base-label-value-block :value="props.mercenary.debtDays" :label="'Дней с долгом'" />
         <base-label-value-block :value="props.mercenary.moral" :label="'Мораль'" />
       </div>
-      <button
+      <base-button
         v-if="props.mercenary.debt > 0"
-        type="button"
         class="mercenary-guild-card__pay-debt"
+        size="sm"
         :disabled="guildStore.money < props.mercenary.debt"
         @click="onPayDebtClick"
       >
         Погасить долг ({{ props.mercenary.debt }})
-      </button>
+      </base-button>
     </div>
     <div v-if="isOnMission" class="mercenary-guild-card__mission-overlay" aria-hidden="true">
       На задании
@@ -133,16 +134,7 @@ function onPayDebtClick() {
   }
 
   &__pay-debt {
-    padding: 0.35rem 0.5rem;
-    cursor: pointer;
-    border: 1px solid color-mix(in srgb, var(--color-black) 70%, var(--color-white));
-    background: color-mix(in srgb, var(--color-white) 96%, var(--color-black));
-    font: inherit;
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.55;
-    }
+    align-self: flex-start;
   }
 }
 </style>

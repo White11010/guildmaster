@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 
 const props = defineProps<BaseModalProps>();
@@ -12,9 +13,12 @@ const emit = defineEmits<BaseModalEmits>();
   >
     <div class="show-success-save-message">
       <p class="show-success-save-message__text">Игра сохранена</p>
-      <button class="show-success-save-message__button" @click="emit('update:modelValue', false)">
+      <base-button
+        class="show-success-save-message__button"
+        @click="emit('update:modelValue', false)"
+      >
         Продолжить
-      </button>
+      </base-button>
     </div>
   </base-modal>
 </template>
@@ -29,9 +33,6 @@ const emit = defineEmits<BaseModalEmits>();
 
   &__text {
     font-size: 2rem;
-  }
-  &__button {
-    font-size: 1.2rem;
   }
 }
 </style>

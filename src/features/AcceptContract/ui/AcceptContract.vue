@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import type { BoardContract } from '@/entities/ContractsBoard';
 import { buildGuildContract, useGuildStore } from '@/entities/Guild';
 
@@ -15,7 +16,9 @@ function onAcceptButtonClick(): void {
 
 <template>
   <div class="accept-contract">
-    <button class="accept-contract__button" @click="onAcceptButtonClick">Принять</button>
+    <base-button class="accept-contract__button" size="lg" @click="onAcceptButtonClick">
+      Принять
+    </base-button>
   </div>
 </template>
 
@@ -23,9 +26,5 @@ function onAcceptButtonClick(): void {
 .accept-contract {
   display: flex;
   justify-content: center;
-
-  &__button {
-    font-size: 1.5rem;
-  }
 }
 </style>

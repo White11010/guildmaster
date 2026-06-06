@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import type { GuildMercenary } from '@/entities/Guild';
 import {
   getGuildMercenaryBasePower,
@@ -54,9 +55,13 @@ function onSelectButtonClick() {
       </div>
     </div>
     <div class="guild-mercenary-assignment-card__footer">
-      <button class="guild-mercenary-assignment-card__button" @click="onSelectButtonClick">
+      <base-button
+        class="guild-mercenary-assignment-card__button"
+        size="lg"
+        @click="onSelectButtonClick"
+      >
         {{ props.isSelected ? 'Отменить' : 'Выбрать' }}
-      </button>
+      </base-button>
     </div>
   </div>
 </template>
@@ -92,9 +97,6 @@ function onSelectButtonClick() {
     width: 100%;
     display: flex;
     justify-content: center;
-  }
-  &__button {
-    font-size: 1.5rem;
   }
 }
 </style>

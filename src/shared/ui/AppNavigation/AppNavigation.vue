@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import { appNavigationItems } from '@/shared/model/AppNavigation/AppNavigation.constants';
 import { type AppNavigationItem } from '@/shared/model/AppNavigation';
 import { useRoute, useRouter } from 'vue-router';
@@ -15,15 +16,14 @@ function onTabItemClick(tab: AppNavigationItem) {
   <nav class="app-navigation">
     <ul class="app-navigation__nav-list">
       <li v-for="tab in appNavigationItems" :key="tab.path" class="app-navigation__nav-item">
-        <button
+        <base-button
           class="app-navigation__nav-item-button"
-          :class="{
-            'app-navigation__nav-item-button--active': tab.path === route.path
-          }"
+          size="lg"
+          :variant="tab.path === route.path ? 'primary' : 'default'"
           @click="onTabItemClick(tab)"
         >
           {{ tab.title }}
-        </button>
+        </base-button>
       </li>
     </ul>
   </nav>
@@ -46,13 +46,6 @@ function onTabItemClick(tab: AppNavigationItem) {
   &__nav-item-button {
     width: 100%;
     height: 5rem;
-    font-size: 1.5rem;
-
-    &--active {
-      color: var(--color-white);
-      background: var(--color-black);
-      border-color: var(--color-white);
-    }
   }
 }
 </style>

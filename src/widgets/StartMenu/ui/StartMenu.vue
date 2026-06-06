@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import { useRouter } from 'vue-router';
 import { useGameStore } from '@/entities/Game';
 import { AppModals, useAppModalStore } from '@/shared/model/AppModal';
@@ -53,15 +54,16 @@ gameStore.loadSavedGames();
 
 <template>
   <div class="start-menu">
-    <button
+    <base-button
       v-for="menuItem in menuItems"
       :key="menuItem.title"
       :disabled="menuItem.disabled"
       class="start-menu__button"
+      size="lg"
       @click="menuItem.handler"
     >
       {{ menuItem.title }}
-    </button>
+    </base-button>
   </div>
 </template>
 
@@ -74,7 +76,7 @@ gameStore.loadSavedGames();
   gap: 1rem;
 
   &__button {
-    font-size: 1.5rem;
+    width: 100%;
   }
 }
 </style>

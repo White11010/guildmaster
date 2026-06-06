@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
+import { BaseCheckbox } from '@/shared/ui/BaseCheckbox';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 import { type GuildMercenary, useGuildStore } from '@/entities/Guild';
 import { storeToRefs } from 'pinia';
@@ -37,12 +39,12 @@ watch(
   }
 );
 
-function toggleId(id: string) {
+function setMercenarySelected(id: string, selected: boolean) {
   const next = new Set(selectedIds.value);
-  if (next.has(id)) {
-    next.delete(id);
-  } else {
+  if (selected) {
     next.add(id);
+  } else {
+    next.delete(id);
   }
   selectedIds.value = next;
 }
@@ -91,11 +93,14 @@ function onSkip() {
       </p>
       <ul class="offer-pay-debts__list">
         <li v-for="m in mercenariesWithDebt" :key="m.id" class="offer-pay-debts__row">
-          <label class="offer-pay-debts__label">
-            <input type="checkbox" :checked="selectedIds.has(m.id)" @change="toggleId(m.id)" />
+          <base-checkbox
+            class="offer-pay-debts__label"
+            :model-value="selectedIds.has(m.id)"
+            @update:model-value="setMercenarySelected(m.id, $event)"
+          >
             <span class="offer-pay-debts__name">{{ m.name }}</span>
             <span class="offer-pay-debts__debt">долг: {{ m.debt }}</span>
-          </label>
+          </base-checkbox>
         </li>
       </ul>
       <p class="offer-pay-debts__total">
@@ -105,15 +110,10 @@ function onSkip() {
         >
       </p>
       <div class="offer-pay-debts__actions">
-        <button
-          type="button"
-          class="offer-pay-debts__btn offer-pay-debts__btn--primary"
-          :disabled="!canConfirm"
-          @click="onConfirm"
-        >
+        <base-button variant="primary" :disabled="!canConfirm" @click="onConfirm">
           Погасить выбранные
-        </button>
-        <button type="button" class="offer-pay-debts__btn" @click="onSkip">Пропустить</button>
+        </base-button>
+        <base-button @click="onSkip">Пропустить</base-button>
       </div>
     </div>
   </base-modal>
@@ -147,20 +147,7 @@ function onSkip() {
   }
 
   &__label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-    padding: 0.35rem 0.25rem;
-    border-radius: 4px;
-
-    &:hover {
-      background: color-mix(in srgb, var(--color-black) 4%, transparent);
-    }
-
-    input {
-      flex-shrink: 0;
-    }
+    width: 100%;
   }
 
   &__name {
@@ -188,25 +175,6 @@ function onSkip() {
     flex-wrap: wrap;
     gap: 0.75rem;
     justify-content: flex-end;
-  }
-
-  &__btn {
-    padding: 0.5rem 1rem;
-    font: inherit;
-    cursor: pointer;
-    border: 1px solid color-mix(in srgb, var(--color-black) 70%, var(--color-white));
-    background: var(--color-white);
-
-    &--primary {
-      background: var(--color-black);
-      color: var(--color-white);
-      border-color: var(--color-black);
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
   }
 }
 </style>

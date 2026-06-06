@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { BaseCheckbox } from '@/shared/ui/BaseCheckbox';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
+import { ref } from 'vue';
 import { type SettingsItem, SettingsItemTypes } from '../model/ChangeSettings.types.ts';
 
 const props = defineProps<BaseModalProps>();
@@ -28,6 +30,13 @@ const settings: SettingsItem[] = [
     }
   }
 ];
+
+const checkboxStates = ref(settings.map(() => false));
+
+function onCheckboxUpdate(index: number, value: boolean) {
+  checkboxStates.value[index] = value;
+  settings[index].handler();
+}
 </script>
 
 <template>
@@ -38,11 +47,14 @@ const settings: SettingsItem[] = [
     @update:model-value="emit('update:modelValue', $event)"
   >
     <div class="settings-modal">
-      <div v-for="setting in settings" :key="setting.title" class="settings-modal__item">
+      <div v-for="(setting, index) in settings" :key="setting.title" class="settings-modal__item">
         <p class="settings-modal__item-title">
           {{ setting.title }}
         </p>
-        <input class="settings-modal__checkbox" type="checkbox" />
+        <base-checkbox
+          :model-value="checkboxStates[index]"
+          @update:model-value="onCheckboxUpdate(index, $event)"
+        />
       </div>
     </div>
   </base-modal>
@@ -63,11 +75,6 @@ const settings: SettingsItem[] = [
 
   &__item-title {
     font-size: 1.5rem;
-  }
-
-  &__checkbox {
-    width: 2rem;
-    height: 2rem;
   }
 }
 </style>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 import { CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START } from '@/entities/Guild/config/GuildContract.config.ts';
 import {
@@ -145,14 +146,15 @@ function onStartContractButtonClick() {
         </div>
       </div>
       <div class="start-contract__footer">
-        <button
+        <base-button
           class="start-contract__start-button"
-          type="button"
+          variant="primary"
+          size="lg"
           :disabled="!canStartContract"
           @click="onStartContractButtonClick"
         >
           Начать
-        </button>
+        </base-button>
       </div>
     </div>
   </base-modal>
@@ -224,14 +226,6 @@ function onStartContractButtonClick() {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-  }
-
-  &__start-button {
-    font-size: 2rem;
-
-    &:disabled {
-      cursor: not-allowed;
-    }
   }
 
   &__assignment {

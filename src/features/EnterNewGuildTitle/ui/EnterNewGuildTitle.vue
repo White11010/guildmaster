@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
+import { BaseInput } from '@/shared/ui/BaseInput';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
 import { onMounted, ref, useTemplateRef } from 'vue';
 import { useGameStore } from '@/entities/Game';
@@ -13,7 +15,7 @@ const router = useRouter();
 const gameStore = useGameStore();
 const appModalStore = useAppModalStore();
 
-const newGuildTitle = ref<string | null>(null);
+const newGuildTitle = ref('');
 
 async function onStartButtonClick() {
   if (newGuildTitle.value) {
@@ -23,11 +25,9 @@ async function onStartButtonClick() {
   }
 }
 
-const titleInput = useTemplateRef<HTMLInputElement>('titleInput');
+const titleInput = useTemplateRef<{ focus: () => void }>('titleInput');
 onMounted(() => {
-  if (titleInput.value) {
-    titleInput.value.focus();
-  }
+  titleInput.value?.focus();
 });
 </script>
 
@@ -40,21 +40,22 @@ onMounted(() => {
   >
     <div class="enter-new-guild-title">
       <p class="enter-new-guild-title__label">Введите название гильдии</p>
-      <input
+      <base-input
         ref="titleInput"
         v-model="newGuildTitle"
         class="enter-new-guild-title__input"
-        type="text"
-        maxlength="100"
+        :maxlength="100"
       />
       <footer class="enter-new-guild-title__footer">
-        <button
+        <base-button
           class="enter-new-guild-title__start-button"
+          variant="primary"
+          size="lg"
           :disabled="!newGuildTitle"
           @click="onStartButtonClick"
         >
           Начать
-        </button>
+        </base-button>
       </footer>
     </div>
   </base-modal>
@@ -73,7 +74,6 @@ onMounted(() => {
 
   &__input {
     width: 500px;
-    font-size: 1.5rem;
   }
 
   &__footer {
@@ -81,10 +81,6 @@ onMounted(() => {
     width: 100%;
     display: flex;
     justify-content: center;
-  }
-
-  &__start-button {
-    font-size: 1.5rem;
   }
 }
 </style>

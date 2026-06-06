@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
 import { AppNavigation } from '../AppNavigation';
 import { AppHeader } from '../AppHeader';
 
@@ -51,13 +52,14 @@ const emit = defineEmits<{
         'app__footer-content--with-navigation': props.withNavigation
       }"
     >
-      <button
+      <base-button
         v-if="props.showEndDayButton"
         class="app__end-day-button"
+        size="lg"
         @click="emit('click:end-day')"
       >
         Завершить день
-      </button>
+      </base-button>
     </div>
   </footer>
 </template>
@@ -122,10 +124,6 @@ const emit = defineEmits<{
     &--with-navigation {
       margin-left: 20rem;
     }
-  }
-
-  &__end-day-button {
-    font-size: 2rem;
   }
 }
 </style>

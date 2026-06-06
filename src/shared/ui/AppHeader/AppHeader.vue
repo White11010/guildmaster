@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { BaseButton } from '@/shared/ui/BaseButton';
+
 const props = defineProps<{
   withNavigation: boolean;
   showMenuButton: boolean;
@@ -19,9 +21,13 @@ const emit = defineEmits<(e: 'click:menu') => void>();
       <p>Золото: {{ props.gold }}</p>
       <p>День: {{ props.day }}</p>
     </div>
-    <button v-if="props.showMenuButton" class="app-header__menu-button" @click="emit('click:menu')">
+    <base-button
+      v-if="props.showMenuButton"
+      class="app-header__menu-button"
+      @click="emit('click:menu')"
+    >
       Меню
-    </button>
+    </base-button>
   </header>
 </template>
 
@@ -34,10 +40,6 @@ const emit = defineEmits<(e: 'click:menu') => void>();
   display: grid;
   grid-template-columns: 18rem 1fr 8rem;
   gap: 2rem;
-
-  &__menu-button {
-    font-size: 1.5rem;
-  }
 
   &__logo {
     font-size: 3rem;
