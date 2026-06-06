@@ -1,24 +1,31 @@
 <script setup lang="ts">
-import { ChangeSettings } from '@/features/ChangeSettings';
-import { ChooseOnboarding } from '@/features/ChooseOnboarding';
-import { EnterNewGuildTitle } from '@/features/EnterNewGuildTitle';
-import { GameMenu } from '@/features/GameMenu';
-import { LoadGame } from '@/features/LoadGame';
-import { OfferPayDebtsModal } from '@/features/OfferPayDebts';
-import { ShowSuccessfulSaveMessage } from '@/features/ShowMessage';
 import { AppModals, useAppModalStore } from '@/shared/model/AppModal';
-import type { Component } from 'vue';
+import { type Component, defineAsyncComponent } from 'vue';
 
 const appModalStore = useAppModalStore();
 
 const modalComponentsMap: Record<AppModals, Component> = {
-  [AppModals.CHANGE_SETTINGS]: ChangeSettings,
-  [AppModals.GAME_MENU]: GameMenu,
-  [AppModals.LOAD_GAME]: LoadGame,
-  [AppModals.ENTER_NEW_GUILD_TITLE]: EnterNewGuildTitle,
-  [AppModals.ONBOARDING]: ChooseOnboarding,
-  [AppModals.SUCCESS_SAVE]: ShowSuccessfulSaveMessage,
-  [AppModals.PAY_DEBTS]: OfferPayDebtsModal
+  [AppModals.CHANGE_SETTINGS]: defineAsyncComponent(() =>
+    import('@/features/ChangeSettings').then((m) => m.ChangeSettings)
+  ),
+  [AppModals.GAME_MENU]: defineAsyncComponent(() =>
+    import('@/features/GameMenu').then((m) => m.GameMenu)
+  ),
+  [AppModals.LOAD_GAME]: defineAsyncComponent(() =>
+    import('@/features/LoadGame').then((m) => m.LoadGame)
+  ),
+  [AppModals.ENTER_NEW_GUILD_TITLE]: defineAsyncComponent(() =>
+    import('@/features/EnterNewGuildTitle').then((m) => m.EnterNewGuildTitle)
+  ),
+  [AppModals.ONBOARDING]: defineAsyncComponent(() =>
+    import('@/features/ChooseOnboarding').then((m) => m.ChooseOnboarding)
+  ),
+  [AppModals.SUCCESS_SAVE]: defineAsyncComponent(() =>
+    import('@/features/ShowMessage').then((m) => m.ShowSuccessfulSaveMessage)
+  ),
+  [AppModals.PAY_DEBTS]: defineAsyncComponent(() =>
+    import('@/features/OfferPayDebts').then((m) => m.OfferPayDebtsModal)
+  )
 };
 
 function onUpdateModelValue(value: boolean): void {

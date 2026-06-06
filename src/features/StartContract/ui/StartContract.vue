@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { BaseButton } from '@/shared/ui/BaseButton';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
-import { CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START } from '@/entities/Guild/config/GuildContract.config.ts';
 import {
   type GuildContract,
   type GuildMercenary,
   GuildMercenaryAssignmentCard,
   useGuildStore
 } from '@/entities/Guild';
-import { getContractSuccessChance } from '@/entities/Guild/lib/getContractSuccessChance.ts';
-import { getGuildMercenaryContractPower } from '@/entities/Guild/lib/getGuildMercenaryContractPower.ts';
 import { computed, ref } from 'vue';
 
 interface Props extends BaseModalProps {
@@ -21,27 +18,13 @@ const emit = defineEmits<BaseModalEmits>();
 const guildStore = useGuildStore();
 
 const selectedMercenaries = ref<GuildMercenary[]>([]);
-const assignmentMercenariesPower = computed(() => {
-  return selectedMercenaries.value.reduce((totalPower, mercenary) => {
-    return totalPower + getGuildMercenaryContractPower(mercenary);
-  }, 0);
-});
 
-const minSquadPowerForContract = computed(() =>
-  props.contract ? Math.ceil(props.contract.power * CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START) : 0
-);
-
-const canStartContract = computed(
-  () =>
-    props.contract !== null && assignmentMercenariesPower.value >= minSquadPowerForContract.value
-);
-
-const contractSuccessChancePercent = computed(() => {
-  if (!props.contract || !canStartContract.value) {
+const contractStartPreview = computed(() => {
+  if (!props.contract) {
     return null;
   }
-  const p = getContractSuccessChance(assignmentMercenariesPower.value, props.contract.power);
-  return Math.round(p * 1000) / 10;
+
+  return guildStore.getContractStartPreview(props.contract, selectedMercenaries.value);
 });
 
 function onSelectMercenaryButtonClick(mercenary: GuildMercenary): void {
@@ -64,7 +47,7 @@ function onUpdateModelValue(isOpen: boolean) {
 }
 
 function onStartContractButtonClick() {
-  if (!canStartContract.value || !props.contract) {
+  if (!contractStartPreview.value?.canStart || !props.contract) {
     return;
   }
   guildStore.startContract(props.contract, selectedMercenaries.value);
@@ -82,7 +65,7 @@ function onStartContractButtonClick() {
     height="min(80vh, 1000px)"
     @update:model-value="onUpdateModelValue"
   >
-    <div v-if="props.contract" class="start-contract">
+    <div v-if="props.contract && contractStartPreview" class="start-contract">
       <div class="start-contract__container">
         <h3>{{ props.contract.title }}</h3>
         <p>
@@ -105,14 +88,17 @@ function onStartContractButtonClick() {
         <div class="start-contract__assignment">
           <div class="start-contract__assignment-block">
             <p>Сила отряда:</p>
-            <p>{{ assignmentMercenariesPower.toFixed(1) }} / {{ props.contract.power }}</p>
+            <p>{{ contractStartPreview.squadPower.toFixed(1) }} / {{ props.contract.power }}</p>
           </div>
-          <p v-if="contractSuccessChancePercent !== null" class="start-contract__success-chance">
-            Шанс успешного прохождения: {{ contractSuccessChancePercent }}%
+          <p
+            v-if="contractStartPreview.successChancePercent !== null"
+            class="start-contract__success-chance"
+          >
+            Шанс успешного прохождения: {{ contractStartPreview.successChancePercent }}%
           </p>
-          <p v-if="!canStartContract" class="start-contract__power-hint">
-            Минимум для старта: {{ minSquadPowerForContract }} ({{
-              Math.round(CONTRACT_MIN_SQUAD_POWER_RATIO_TO_START * 100)
+          <p v-if="!contractStartPreview.canStart" class="start-contract__power-hint">
+            Минимум для старта: {{ contractStartPreview.minSquadPower }} ({{
+              contractStartPreview.minSquadPowerRatioPercent
             }}% силы контракта)
           </p>
           <ul class="start-contract__selected-mercenaries-list">
@@ -125,7 +111,7 @@ function onStartContractButtonClick() {
               <p>{{ mercenary.class }}</p>
               <div class="start-contract__assignment-block">
                 <p>Сила (с моралью):</p>
-                <p>{{ getGuildMercenaryContractPower(mercenary).toFixed(1) }}</p>
+                <p>{{ guildStore.getMercenaryContractPower(mercenary).toFixed(1) }}</p>
               </div>
             </li>
           </ul>
@@ -150,7 +136,7 @@ function onStartContractButtonClick() {
           class="start-contract__start-button"
           variant="primary"
           size="lg"
-          :disabled="!canStartContract"
+          :disabled="!contractStartPreview.canStart"
           @click="onStartContractButtonClick"
         >
           Начать

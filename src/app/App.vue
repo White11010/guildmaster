@@ -50,17 +50,9 @@ function onMenuButtonClick() {
   appModalStore.setCurrentModal(AppModals.GAME_MENU);
 }
 
-function shouldOfferDebtSettlement(): boolean {
-  const withDebt = guildStore.mercenaries.filter((mercenary) => mercenary.debt > 0);
-  if (!withDebt.length || guildStore.money <= 0) {
-    return false;
-  }
-  return withDebt.some((mercenary) => mercenary.debt <= guildStore.money);
-}
-
 function onEndDayButtonClick() {
   gameStore.finishDay();
-  if (shouldOfferDebtSettlement()) {
+  if (guildStore.canSettleAnyDebt) {
     appModalStore.setCurrentModal(AppModals.PAY_DEBTS);
   }
 }

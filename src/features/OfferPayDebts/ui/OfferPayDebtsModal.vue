@@ -2,7 +2,7 @@
 import { BaseButton } from '@/shared/ui/BaseButton';
 import { BaseCheckbox } from '@/shared/ui/BaseCheckbox';
 import { BaseModal, type BaseModalEmits, type BaseModalProps } from '@/shared/ui/BaseModal';
-import { type GuildMercenary, useGuildStore } from '@/entities/Guild';
+import { useGuildStore } from '@/entities/Guild';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 
@@ -10,31 +10,15 @@ const props = defineProps<BaseModalProps>();
 const emit = defineEmits<BaseModalEmits>();
 
 const guildStore = useGuildStore();
-const { money } = storeToRefs(guildStore);
+const { money, mercenariesWithDebt } = storeToRefs(guildStore);
 
-const mercenariesWithDebt = computed(() => guildStore.mercenaries.filter((m) => m.debt > 0));
-
-/** Жадно: сначала меньшие долги, пока хватает золота — максимум полных погашений. */
-function buildGreedySelection(list: GuildMercenary[], available: number): Set<string> {
-  const sorted = [...list].sort((a, b) => a.debt - b.debt);
-  const ids = new Set<string>();
-  let sum = 0;
-  for (const m of sorted) {
-    if (sum + m.debt <= available) {
-      ids.add(m.id);
-      sum += m.debt;
-    }
-  }
-  return ids;
-}
-
-const selectedIds = ref(new Set());
+const selectedIds = ref<Set<string>>(new Set());
 
 watch(
   () => props.modelValue,
   (open) => {
     if (open) {
-      selectedIds.value = buildGreedySelection(mercenariesWithDebt.value, guildStore.money);
+      selectedIds.value = guildStore.getGreedyDebtSelection();
     }
   }
 );
@@ -51,8 +35,8 @@ function setMercenarySelected(id: string, selected: boolean) {
 
 const selectedTotal = computed(() =>
   mercenariesWithDebt.value
-    .filter((m) => selectedIds.value.has(m.id))
-    .reduce((s, m) => s + m.debt, 0)
+    .filter((mercenary) => selectedIds.value.has(mercenary.id))
+    .reduce((sum, mercenary) => sum + mercenary.debt, 0)
 );
 
 const canConfirm = computed(
@@ -63,12 +47,8 @@ function onConfirm() {
   if (!canConfirm.value) {
     return;
   }
-  const ordered = mercenariesWithDebt.value
-    .filter((m) => selectedIds.value.has(m.id))
-    .sort((a, b) => a.debt - b.debt);
-  for (const m of ordered) {
-    guildStore.payMercenaryDebt(m.id);
-  }
+
+  guildStore.paySelectedMercenaryDebts([...selectedIds.value]);
   emit('update:modelValue', false);
 }
 
@@ -92,14 +72,18 @@ function onSkip() {
         всех, если не хватает денег).
       </p>
       <ul class="offer-pay-debts__list">
-        <li v-for="m in mercenariesWithDebt" :key="m.id" class="offer-pay-debts__row">
+        <li
+          v-for="mercenary in mercenariesWithDebt"
+          :key="mercenary.id"
+          class="offer-pay-debts__row"
+        >
           <base-checkbox
             class="offer-pay-debts__label"
-            :model-value="selectedIds.has(m.id)"
-            @update:model-value="setMercenarySelected(m.id, $event)"
+            :model-value="selectedIds.has(mercenary.id)"
+            @update:model-value="setMercenarySelected(mercenary.id, $event)"
           >
-            <span class="offer-pay-debts__name">{{ m.name }}</span>
-            <span class="offer-pay-debts__debt">долг: {{ m.debt }}</span>
+            <span class="offer-pay-debts__name">{{ mercenary.name }}</span>
+            <span class="offer-pay-debts__debt">долг: {{ mercenary.debt }}</span>
           </base-checkbox>
         </li>
       </ul>

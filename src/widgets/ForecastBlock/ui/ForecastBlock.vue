@@ -1,32 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useGameStore } from '@/entities/Game';
-import {
-  type GuildContract,
-  GuildContractStates,
-  type GuildMercenary,
-  useGuildStore
-} from '@/entities/Guild';
-import { getContractSuccessChance } from '@/entities/Guild/lib/getContractSuccessChance.ts';
-import { getGuildMercenaryContractPower } from '@/entities/Guild/lib/getGuildMercenaryContractPower.ts';
+import { useGuildStore } from '@/entities/Guild';
 import { BaseContentBlock } from '@/shared/ui/BaseContentBlock';
-
-interface ForecastDayCard {
-  dayLabel: string;
-  dayNumber: number;
-  startGold: number;
-  endGold: number;
-  income: number;
-  expenses: number;
-  delta: number;
-  salaryEvents: number;
-  contractEvents: number;
-}
-
-interface ContractIncomeProjection {
-  dayOffset: number;
-  income: number;
-}
 
 const FORECAST_DAYS = 7;
 
@@ -41,94 +17,9 @@ function formatSignedValue(value: number): string {
   return value.toString();
 }
 
-function buildDayLabel(dayOffset: number): string {
-  if (dayOffset === 1) {
-    return 'Завтра';
-  }
-
-  if (dayOffset === 2) {
-    return 'Послезавтра';
-  }
-
-  return `Через ${dayOffset} дн.`;
-}
-
-function getProjectedContractIncome(contract: GuildContract): ContractIncomeProjection | null {
-  if (contract.state !== GuildContractStates.IN_PROGRESS) {
-    return null;
-  }
-
-  const durationNeeded = contract.actualDurationDays ?? contract.duration[0];
-  const dayOffset = durationNeeded - contract.daysInProgress;
-
-  if (dayOffset < 1 || dayOffset > FORECAST_DAYS) {
-    return null;
-  }
-
-  const squadPower = contract.mercenaries.reduce((sum, mercenary) => {
-    const guildMercenary = guildStore.mercenaries.find((item) => item.id === mercenary.id);
-    return sum + (guildMercenary ? getGuildMercenaryContractPower(guildMercenary) : 0);
-  }, 0);
-
-  return {
-    dayOffset,
-    income: Math.round(contract.reward.money * getContractSuccessChance(squadPower, contract.power))
-  };
-}
-
-function getSalaryDueAmount(mercenary: GuildMercenary, dayOffset: number): number {
-  return (mercenary.daysInGuild + dayOffset) % 7 === 0 ? mercenary.salary : 0;
-}
-
-const forecastCards = computed<ForecastDayCard[]>(() => {
-  const contractIncomeByDay = new Map<number, number>();
-  const contractEventsByDay = new Map<number, number>();
-
-  guildStore.currentContracts
-    .map(getProjectedContractIncome)
-    .filter((projection): projection is ContractIncomeProjection => projection !== null)
-    .forEach((projection) => {
-      contractIncomeByDay.set(
-        projection.dayOffset,
-        (contractIncomeByDay.get(projection.dayOffset) ?? 0) + projection.income
-      );
-      contractEventsByDay.set(
-        projection.dayOffset,
-        (contractEventsByDay.get(projection.dayOffset) ?? 0) + 1
-      );
-    });
-
-  let previousEndGold = guildStore.money;
-
-  return Array.from({ length: FORECAST_DAYS }, (_, index) => {
-    const dayOffset = index + 1;
-    const startGold = previousEndGold;
-    const plannedSalary = guildStore.mercenaries.reduce((sum, mercenary) => {
-      return sum + getSalaryDueAmount(mercenary, dayOffset);
-    }, 0);
-    const expenses = Math.min(startGold, plannedSalary);
-    const income = contractIncomeByDay.get(dayOffset) ?? 0;
-    const endGold = startGold - expenses + income;
-    const delta = endGold - startGold;
-    const salaryEvents = guildStore.mercenaries.filter(
-      (mercenary) => getSalaryDueAmount(mercenary, dayOffset) > 0
-    ).length;
-
-    previousEndGold = endGold;
-
-    return {
-      dayLabel: buildDayLabel(dayOffset),
-      dayNumber: gameStore.currentGame.day + dayOffset,
-      startGold,
-      endGold,
-      income,
-      expenses,
-      delta,
-      salaryEvents,
-      contractEvents: contractEventsByDay.get(dayOffset) ?? 0
-    };
-  });
-});
+const forecastCards = computed(() =>
+  guildStore.getCashflowForecast(gameStore.currentGame.day, FORECAST_DAYS)
+);
 </script>
 
 <template>

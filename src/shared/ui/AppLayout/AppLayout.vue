@@ -36,12 +36,7 @@ const emit = defineEmits<{
     }"
   >
     <app-navigation v-if="props.withNavigation" class="app__navigation" />
-    <div
-      class="app__container"
-      :class="{
-        'app__container--with-navigation': props.withNavigation
-      }"
-    >
+    <div class="app__container">
       <slot />
     </div>
   </div>
@@ -67,13 +62,13 @@ const emit = defineEmits<{
 <style scoped lang="scss">
 .app {
   &__main {
-    width: min(100vw, 2560px);
+    width: 100%;
+    max-width: 2560px;
     margin: 0 auto;
     height: 100vh;
     overflow: hidden;
     padding: 0 2rem;
     box-sizing: border-box;
-    position: relative;
     display: flex;
     gap: 2rem;
 
@@ -83,37 +78,35 @@ const emit = defineEmits<{
 
     &--with-header {
       height: calc(100vh - 8.5rem);
-    }
 
-    &--with-footer {
-      height: calc(100vh - 13rem);
-    }
-
-    &--with-header {
-      &--with-footer {
+      &.app__main--with-footer {
         height: calc(100vh - 18.5rem);
       }
+    }
+
+    &--with-footer:not(.app__main--with-header) {
+      height: calc(100vh - 13rem);
     }
   }
 
   &__navigation {
     width: 18rem;
     min-width: 18rem;
+    flex-shrink: 0;
   }
 
   &__container {
     height: 100%;
-    width: 100vw;
-
-    &--with-navigation {
-      width: calc(100vw - 19rem);
-    }
+    flex: 1;
+    min-width: 0;
   }
 
   &__footer {
-    width: min(100vw, 2560px);
+    width: 100%;
+    max-width: 2560px;
     margin: 1rem auto 0 auto;
     padding: 0 2rem 1rem 2rem;
+    box-sizing: border-box;
   }
 
   &__footer-content {

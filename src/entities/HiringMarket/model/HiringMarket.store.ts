@@ -1,34 +1,37 @@
 import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 import type { Mercenary } from '@/entities/Mercenary';
 
-interface State {
-  mercenaries: Mercenary[];
-}
+export const useHiringMarketStore = defineStore('hiringMarket', () => {
+  const mercenaries = ref<Mercenary[]>([]);
 
-export const useHiringMarketStore = defineStore('hiringMarket', {
-  state: (): State => {
-    return {
-      mercenaries: []
-    };
-  },
-  getters: {
-    mercenariesIds: (state: State) => state.mercenaries.map((mercenary) => mercenary.id)
-  },
-  actions: {
-    initMercenaries(mercenaries: Mercenary[]) {
-      this.mercenaries = mercenaries;
-    },
-    addNewMercenary(mercenary: Mercenary) {
-      this.mercenaries.unshift(mercenary);
-    },
-    addNewMultipleMercenaries(mercenaries: Mercenary[]) {
-      this.mercenaries.unshift(...mercenaries);
-    },
-    removeMercenaryById(mercenaryId: string) {
-      const mercenaryToRemove = this.mercenaries.findIndex(
-        (mercenary) => mercenary.id === mercenaryId
-      );
-      this.mercenaries.splice(mercenaryToRemove, 1);
-    }
+  const mercenariesIds = computed(() => mercenaries.value.map((mercenary) => mercenary.id));
+
+  function initMercenaries(newMercenaries: Mercenary[]) {
+    mercenaries.value = newMercenaries;
   }
+
+  function addNewMercenary(mercenary: Mercenary) {
+    mercenaries.value.unshift(mercenary);
+  }
+
+  function addNewMultipleMercenaries(newMercenaries: Mercenary[]) {
+    mercenaries.value.unshift(...newMercenaries);
+  }
+
+  function removeMercenaryById(mercenaryId: string) {
+    const mercenaryToRemove = mercenaries.value.findIndex(
+      (mercenary) => mercenary.id === mercenaryId
+    );
+    mercenaries.value.splice(mercenaryToRemove, 1);
+  }
+
+  return {
+    mercenaries,
+    mercenariesIds,
+    initMercenaries,
+    addNewMercenary,
+    addNewMultipleMercenaries,
+    removeMercenaryById
+  };
 });

@@ -1,17 +1,14 @@
 import { useGameStore } from '@/entities/Game';
-import { router } from '@/app/providers';
+import { useRouter } from 'vue-router';
 import { ROUTE_PATH } from '@/shared/config';
 
 export function useTryLoadLastGame() {
   const gameStore = useGameStore();
+  const router = useRouter();
 
-  if (!gameStore.isGameLoaded) {
-    gameStore.loadSavedGames();
+  const { loaded } = gameStore.ensureGameLoaded();
 
-    if (gameStore.savedGamesIds.length) {
-      gameStore.initLastSavedGame();
-    } else {
-      router.push(ROUTE_PATH.MENU);
-    }
+  if (!loaded) {
+    router.push(ROUTE_PATH.MENU);
   }
 }

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { GuildContractStates, useGuildStore } from '@/entities/Guild';
+import { useGuildStore } from '@/entities/Guild';
 import { BaseLabelValueBlock } from '@/shared/ui/BaseLabelValueBlock';
+import { storeToRefs } from 'pinia';
 
 const guildStore = useGuildStore();
+const { completedContractsCount, failedContractsCount } = storeToRefs(guildStore);
 </script>
 
 <template>
@@ -19,22 +21,8 @@ const guildStore = useGuildStore();
     <div class="watch-guild-main-info__info">
       <base-label-value-block :value="guildStore.fame" label="Известность" />
       <base-label-value-block :value="guildStore.reputation" label="Репутация" />
-      <base-label-value-block
-        :value="
-          guildStore.currentContracts.filter(
-            (contract) => contract.state === GuildContractStates.COMPLETED
-          ).length
-        "
-        label="Контрактов выполнено"
-      />
-      <base-label-value-block
-        :value="
-          guildStore.currentContracts.filter((contract) =>
-            [GuildContractStates.FAILED, GuildContractStates.OVERDUE].includes(contract.state)
-          ).length
-        "
-        label="Контрактов провалено"
-      />
+      <base-label-value-block :value="completedContractsCount" label="Контрактов выполнено" />
+      <base-label-value-block :value="failedContractsCount" label="Контрактов провалено" />
     </div>
   </div>
 </template>

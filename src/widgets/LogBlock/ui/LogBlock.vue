@@ -5,15 +5,22 @@ import { computed } from 'vue';
 
 const logStore = useLogStore();
 
+const MAX_VISIBLE_EVENTS = 200;
+
 type LogRow =
   | { kind: 'sep'; day: number; key: string }
   | { kind: 'ev'; event: LogEvent; key: string };
 
+const visibleEvents = computed((): LogEvent[] => logStore.log.slice(0, MAX_VISIBLE_EVENTS));
+
+const hiddenEventsCount = computed(() => Math.max(0, logStore.log.length - MAX_VISIBLE_EVENTS));
+
 const displayedRows = computed((): LogRow[] => {
   const rows: LogRow[] = [];
   let prevDay: number | undefined;
-  for (let i = 0; i < logStore.log.length; i++) {
-    const event = logStore.log[i];
+  const events = visibleEvents.value;
+  for (let i = 0; i < events.length; i++) {
+    const event = events[i];
     const d = event.day;
     if (d !== undefined && d !== prevDay) {
       rows.push({ kind: 'sep', day: d, key: `sep-${d.toString()}-${i.toString()}` });
@@ -36,6 +43,9 @@ const displayedRows = computed((): LogRow[] => {
         <div v-if="row.kind === 'sep'" class="log-block__day-separator">День {{ row.day }}</div>
         <log-event-card v-else :event="row.event" />
       </template>
+      <div v-if="hiddenEventsCount > 0" class="log-block__truncated">
+        …и ещё {{ hiddenEventsCount }} событий
+      </div>
     </div>
   </base-content-block>
 </template>
@@ -47,6 +57,13 @@ const displayedRows = computed((): LogRow[] => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  &__truncated {
+    padding: 0.5rem 0;
+    text-align: center;
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--color-black) 55%, transparent);
+  }
 
   &__day-separator {
     margin-top: 0.25rem;

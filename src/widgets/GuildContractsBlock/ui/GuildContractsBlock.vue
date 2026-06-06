@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { BaseContentBlock } from '@/shared/ui/BaseContentBlock';
 import { type GuildContract, GuildContractCard, useGuildStore } from '@/entities/Guild';
-import { StartContract } from '@/features/StartContract';
-import { ref } from 'vue';
+import { defineAsyncComponent, ref } from 'vue';
+
+const StartContract = defineAsyncComponent(() =>
+  import('@/features/StartContract').then((m) => m.StartContract)
+);
 
 const guildStore = useGuildStore();
 

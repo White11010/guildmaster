@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { BaseButton } from '@/shared/ui/BaseButton';
-import type { GuildMercenary } from '@/entities/Guild';
 import {
   getGuildMercenaryBasePower,
-  getGuildMercenaryContractPower
-} from '@/entities/Guild/lib/getGuildMercenaryContractPower.ts';
+  getGuildMercenaryContractPower,
+  type GuildMercenary
+} from '@/entities/Guild';
 import { ClassesTitles, SpeciesTitles } from '@/entities/Mercenary';
 
 const props = defineProps<{

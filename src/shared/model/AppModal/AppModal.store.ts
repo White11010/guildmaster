@@ -1,25 +1,24 @@
 import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 import { AppModals } from '@/shared/model/AppModal/AppModal.types.ts';
 
-interface State {
-  currentModal: AppModals | null;
-}
+export const useAppModalStore = defineStore('appModal', () => {
+  const currentModal = ref<AppModals | null>(null);
 
-export const useAppModalStore = defineStore('appModal', {
-  state: (): State => {
-    return {
-      currentModal: null
-    };
-  },
-  getters: {
-    isModalShown: (state) => state.currentModal !== null
-  },
-  actions: {
-    setCurrentModal(modal: AppModals) {
-      this.currentModal = modal;
-    },
-    closeModal() {
-      this.currentModal = null;
-    }
+  const isModalShown = computed(() => currentModal.value !== null);
+
+  function setCurrentModal(modal: AppModals) {
+    currentModal.value = modal;
   }
+
+  function closeModal() {
+    currentModal.value = null;
+  }
+
+  return {
+    currentModal,
+    isModalShown,
+    setCurrentModal,
+    closeModal
+  };
 });
