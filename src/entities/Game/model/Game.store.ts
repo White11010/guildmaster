@@ -155,7 +155,7 @@ export const useGameStore = defineStore('game', () => {
         ...contractsBoardStore.contractsIds
       ]);
       contractsBoardStore.addNewMultipleContracts(newContracts.map(buildBoardContract));
-      logStore.addNewContractEvenMultiple(newContracts.map(buildBoardContract), gameDay);
+      logStore.addNewContractEventMultiple(newContracts.map(buildBoardContract), gameDay);
     }
   }
 

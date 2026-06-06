@@ -10,24 +10,15 @@ const emit = defineEmits<BaseModalEmits>();
 const settings: SettingsItem[] = [
   {
     title: 'Тут будут настройки',
-    type: SettingsItemTypes.CHECKBOX,
-    handler() {
-      console.log('settings');
-    }
+    type: SettingsItemTypes.CHECKBOX
   },
   {
     title: 'Тут будут настройки',
-    type: SettingsItemTypes.CHECKBOX,
-    handler() {
-      console.log('settings');
-    }
+    type: SettingsItemTypes.CHECKBOX
   },
   {
     title: 'Тут будут настройки',
-    type: SettingsItemTypes.CHECKBOX,
-    handler() {
-      console.log('settings');
-    }
+    type: SettingsItemTypes.CHECKBOX
   }
 ];
 
@@ -35,7 +26,6 @@ const checkboxStates = ref(settings.map(() => false));
 
 function onCheckboxUpdate(index: number, value: boolean) {
   checkboxStates.value[index] = value;
-  settings[index].handler();
 }
 </script>
 

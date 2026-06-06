@@ -22,11 +22,11 @@ beforeEach(() => {
 });
 
 describe('Guild store — money', () => {
-  it('adds and removes money through actions only', () => {
+  it('adds money through an action', () => {
     const guild = useGuildStore();
     guild.addMoney(100);
     expect(guild.money).toBe(100);
-    guild.removeMoney(40);
+    guild.addMoney(-40);
     expect(guild.money).toBe(60);
   });
 });

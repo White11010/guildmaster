@@ -249,26 +249,6 @@ export const useGuildStore = defineStore('guild', () => {
     money.value += amount;
   }
 
-  function removeMoney(amount: number) {
-    money.value -= amount;
-  }
-
-  function addReputation(amount: number) {
-    reputation.value += amount;
-  }
-
-  function removeReputation(amount: number) {
-    reputation.value -= amount;
-  }
-
-  function addFame(amount: number) {
-    fame.value += amount;
-  }
-
-  function removeFame(amount: number) {
-    fame.value -= amount;
-  }
-
   function initGuild(guild: State) {
     title.value = guild.title;
     money.value = guild.money;
@@ -284,15 +264,6 @@ export const useGuildStore = defineStore('guild', () => {
       mercenaries.value.push(buildGuildMercenary(mercenary));
       money.value -= mercenary.price;
       hiringMarketStore.removeMercenaryById(mercenary.id);
-    }
-  }
-
-  function updateMercenary(updatedMercenary: Mercenary) {
-    const mercenaryToUpdate = mercenaries.value.find(
-      (mercenary) => mercenary.id === updatedMercenary.id
-    );
-    if (mercenaryToUpdate) {
-      Object.assign(mercenaryToUpdate, updatedMercenary);
     }
   }
 
@@ -366,15 +337,6 @@ export const useGuildStore = defineStore('guild', () => {
         contractToStart.duration[0],
         contractToStart.duration[1]
       );
-    }
-  }
-
-  function updateContract(updatedContract: GuildContract) {
-    const contractToUpdate = currentContracts.value.find(
-      (contract) => contract.id === updatedContract.id
-    );
-    if (contractToUpdate) {
-      Object.assign(contractToUpdate, updatedContract);
     }
   }
 
@@ -547,18 +509,11 @@ export const useGuildStore = defineStore('guild', () => {
     failedContractsCount,
     initGuild,
     hireMercenary,
-    updateMercenary,
     removeMercenary,
     processMercenariesWhoLeaveAtZeroMorale,
     addContract,
     startContract,
-    updateContract,
     addMoney,
-    removeMoney,
-    addReputation,
-    removeReputation,
-    addFame,
-    removeFame,
     paySalary,
     applyDebtMoralePerDay,
     payMercenaryDebt,

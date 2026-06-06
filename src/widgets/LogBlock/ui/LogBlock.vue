@@ -69,7 +69,7 @@ const displayedRows = computed((): LogRow[] => {
     margin-top: 0.25rem;
     padding: 0.35rem 0 0.15rem;
     border-top: 2px solid color-mix(in srgb, var(--color-black) 20%, transparent);
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;

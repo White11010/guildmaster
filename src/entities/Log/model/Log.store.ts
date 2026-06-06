@@ -28,7 +28,7 @@ export const useLogStore = defineStore('log', () => {
     });
   }
 
-  function addNewContractEven(contract: BoardContract, day?: number) {
+  function addNewContractEvent(contract: BoardContract, day?: number) {
     log.value.unshift({
       id: uuidv4(),
       type: LogEventTypes.NEW_CONTRACT,
@@ -37,9 +37,9 @@ export const useLogStore = defineStore('log', () => {
     });
   }
 
-  function addNewContractEvenMultiple(contracts: BoardContract[], day?: number) {
+  function addNewContractEventMultiple(contracts: BoardContract[], day?: number) {
     contracts.forEach((contract: BoardContract) => {
-      addNewContractEven(contract, day);
+      addNewContractEvent(contract, day);
     });
   }
 
@@ -117,8 +117,8 @@ export const useLogStore = defineStore('log', () => {
     initLog,
     addNewMercenaryEvent,
     addNewMercenaryEventMultiple,
-    addNewContractEven,
-    addNewContractEvenMultiple,
+    addNewContractEvent,
+    addNewContractEventMultiple,
     addMercenaryMoraleChange,
     addMercenaryLeftGuild,
     addContractCompleted,

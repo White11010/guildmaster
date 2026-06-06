@@ -11,10 +11,6 @@ export const useHiringMarketStore = defineStore('hiringMarket', () => {
     mercenaries.value = newMercenaries;
   }
 
-  function addNewMercenary(mercenary: Mercenary) {
-    mercenaries.value.unshift(mercenary);
-  }
-
   function addNewMultipleMercenaries(newMercenaries: Mercenary[]) {
     mercenaries.value.unshift(...newMercenaries);
   }
@@ -30,7 +26,6 @@ export const useHiringMarketStore = defineStore('hiringMarket', () => {
     mercenaries,
     mercenariesIds,
     initMercenaries,
-    addNewMercenary,
     addNewMultipleMercenaries,
     removeMercenaryById
   };

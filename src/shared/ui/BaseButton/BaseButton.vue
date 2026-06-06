@@ -51,6 +51,7 @@ withDefaults(
   }
 
   &--sm {
+    min-height: 32px;
     padding: 0.35rem 0.75rem;
     font-size: 1rem;
   }

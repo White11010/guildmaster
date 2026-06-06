@@ -29,9 +29,6 @@ const getModalBodyStyles = computed((): Record<string, string> => {
   if (props.title && props.maxHeight !== 'auto') {
     styles.maxHeight = `calc(${props.maxHeight} - 81px - 1rem)`;
   }
-  if (!props.height && !props.maxHeight) {
-    styles.flex = '1';
-  }
   return styles;
 });
 </script>

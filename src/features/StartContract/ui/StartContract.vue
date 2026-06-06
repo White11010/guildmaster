@@ -115,7 +115,7 @@ function onStartContractButtonClick() {
               </div>
             </li>
           </ul>
-          <div class="start-contract__available-mernaries-list">
+          <div class="start-contract__available-mercenaries-list">
             <guild-mercenary-assignment-card
               v-for="mercenary in guildStore.freeMercenaries"
               :key="mercenary.id"
@@ -186,7 +186,7 @@ function onStartContractButtonClick() {
     gap: 1rem;
   }
 
-  &__available-mernaries-list {
+  &__available-mercenaries-list {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;

@@ -127,7 +127,7 @@ const forecastCards = computed(() =>
   }
 
   &__card-label {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
@@ -150,7 +150,7 @@ const forecastCards = computed(() =>
   }
 
   &__gold-label {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     color: color-mix(in srgb, var(--color-black) 70%, var(--color-white));
   }
 
@@ -172,7 +172,7 @@ const forecastCards = computed(() =>
   }
 
   &__metric-label {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     color: color-mix(in srgb, var(--color-black) 70%, var(--color-white));
   }
 
@@ -191,7 +191,7 @@ const forecastCards = computed(() =>
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     color: color-mix(in srgb, var(--color-black) 68%, var(--color-white));
   }
 }

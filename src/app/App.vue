@@ -27,13 +27,11 @@ const ROUTES_WITH_HEADER_AND_NAVIGATION = [
 type NavigationRouteName = (typeof ROUTES_WITH_HEADER_AND_NAVIGATION)[number];
 
 function isRouteName(value: unknown): value is RouteName {
-  return typeof value === 'string' && Object.values(ROUTE_NAME).includes(value as RouteName);
+  return typeof value === 'string' && Object.values(ROUTE_NAME).some((name) => name === value);
 }
 
 function isNavigationRouteName(value: unknown): value is NavigationRouteName {
-  return (
-    isRouteName(value) && ROUTES_WITH_HEADER_AND_NAVIGATION.includes(value as NavigationRouteName)
-  );
+  return isRouteName(value) && ROUTES_WITH_HEADER_AND_NAVIGATION.some((name) => name === value);
 }
 
 const isNavigationRoute = computed(() => isNavigationRouteName(route.name));

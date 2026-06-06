@@ -11,10 +11,6 @@ export const useContractsBoardStore = defineStore('contractsBoard', () => {
     contracts.value = newContracts;
   }
 
-  function addNewContract(contract: BoardContract) {
-    contracts.value.unshift(contract);
-  }
-
   function addNewMultipleContracts(newContracts: BoardContract[]) {
     contracts.value.unshift(...newContracts);
   }
@@ -28,7 +24,6 @@ export const useContractsBoardStore = defineStore('contractsBoard', () => {
     contracts,
     contractsIds,
     initContracts,
-    addNewContract,
     addNewMultipleContracts,
     removeContractById
   };
